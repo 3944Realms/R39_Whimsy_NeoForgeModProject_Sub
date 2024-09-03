@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.r3944realms.leashedplayer;
 
 import org.slf4j.Logger;
 
