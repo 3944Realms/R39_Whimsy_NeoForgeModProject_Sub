@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 public class Gamerules {
-    public static final String GAMERULE_PREFIX = "RWN.";
+    public static final String GAMERULE_PREFIX = "LP.";
     public static final GameruleRegistry GAMERULE_REGISTRY = GameruleRegistry.INSTANCE;
     public static final HashMap<String, Boolean> gamerulesBooleanValuesClient = new HashMap<>();
     public static final HashMap<String, Integer> gameruleIntegerValuesClient = new HashMap<>();

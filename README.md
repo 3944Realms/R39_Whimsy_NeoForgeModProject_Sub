@@ -1,27 +1,20 @@
+## 简介
+现在开始你可以用拴绳栓住玩家，也可以栓住自己了，不如尝试栓住彼此来通关我的世界吧（
 
-Installation information
-=======
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions at [github](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+你可以：
+1. 拴绳可以拴住玩家
+2. 在无任何栓住实体的情况下用拴绳对准栅栏可以拴住自己
+3. 可以用指令来获取和调整玩家实体的拴绳的长度
+4. 目前有游戏规则来决定被栓玩家是否在传送时能随拴绳持有者一起传送
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
 
-> **Note**: For Eclipse, use tasks in `Launch Group` instead of ones founds in `Java Application`. A preparation task must run before launching the game. NeoGradle uses launch groups to do these subsequently.
+## 指令
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+* `/lp leash length [<玩家>] setLength <长度> ` - 设置该玩家的拴绳长度 [ 如果<玩家>为空则代表执行对象是自己 ,<长度> 为在 5 ~ 1024之间的浮点数 ]
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+* `/lp leash length [<玩家>] [getLength]` - 获取该玩家的拴绳长度 [ 如果<玩家>为空则代表执行对象是自己 , [getLength] 可不写] 
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+## 游戏规则
+
+* `LP.TeleportWithLeashedPlayers` - 来决定被栓玩家是否在传送时能随拴绳持有者一起传送 [默认值: True]
