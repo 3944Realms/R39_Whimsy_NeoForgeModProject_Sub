@@ -1,0 +1,7 @@
+{
+  "gamerule.RWN.TeleportWithLeashedPlayers": "傳送被栓玩家",
+  "gamerule.RWN.TeleportWithLeashedPlayers.description": "傳送時將被栓玩家與隨自己一起傳送",
+  "leashedplayer.command.leash.message.leash.length.fail": "失敗（内部錯誤）",
+  "leashedplayer.command.leash.message.leash.length.set": "%s的栓繩長度被設置為%f格",
+  "leashedplayer.command.leash.message.leash.length.show": "%s的栓繩長度為%f格"
+}

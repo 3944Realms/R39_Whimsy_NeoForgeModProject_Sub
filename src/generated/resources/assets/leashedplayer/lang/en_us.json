@@ -1,0 +1,7 @@
+{
+  "gamerule.RWN.TeleportWithLeashedPlayers": "Teleport with leashed player",
+  "gamerule.RWN.TeleportWithLeashedPlayers.description": "You will teleport with your leashed players ",
+  "leashedplayer.command.leash.message.leash.length.fail": "Failed (Internal Error)",
+  "leashedplayer.command.leash.message.leash.length.set": "The Leash length of %s is set to %f blocks",
+  "leashedplayer.command.leash.message.leash.length.show": "The Leash Length of %s is %f blocks"
+}
