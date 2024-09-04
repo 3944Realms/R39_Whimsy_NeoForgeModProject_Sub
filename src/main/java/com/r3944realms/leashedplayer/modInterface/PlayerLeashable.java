@@ -1,13 +1,18 @@
 package com.r3944realms.leashedplayer.modInterface;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Leashable;
+import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface PlayerLeashable extends Leashable {
 
@@ -50,5 +55,65 @@ public interface PlayerLeashable extends Leashable {
         }
         //这边覆写去掉了乘坐相关的逻辑，即乘坐状态下也可以正常被栓住，不影响其乘坐状态
 
+    }
+    static Entity getLeashDataEntityOrThrown(@NotNull Leashable.LeashData leashDataFromEntityData, @NotNull ServerLevel level) throws Exception {
+        if(leashDataFromEntityData.delayedLeashInfo != null) {
+            Optional<UUID> UUID = leashDataFromEntityData.delayedLeashInfo.left();
+            Optional<BlockPos> BlockPos = leashDataFromEntityData.delayedLeashInfo.right();
+            if (UUID.isPresent()) {
+                return level.getEntity(UUID.get());
+            } else if(BlockPos.isPresent()) {
+                return LeashFenceKnotEntity.getOrCreateKnot(level, BlockPos.get());
+            } else {
+                throw new Exception("invalid delayedLeashInfo");
+            }
+        }
+        else if(leashDataFromEntityData.leashHolder != null) {
+            return leashDataFromEntityData.leashHolder;
+        }
+        else if(leashDataFromEntityData.delayedLeashHolderId != 0) {
+            Entity entity = level.getEntity(leashDataFromEntityData.delayedLeashHolderId);
+            if(entity == null) {
+                throw new Exception("Not found Entity. maybe the pId is invalid");
+            }
+            return entity;
+        }
+        else {
+            throw new Exception("invalid leash data");
+        }
+    }
+    static boolean isLeashFenceKnotEntityExisted(ServerLevel pLevel, BlockPos pPos) {
+        int i = pPos.getX();
+        int j = pPos.getY();
+        int k = pPos.getZ();
+
+        for (LeashFenceKnotEntity leashfenceknotentity : pLevel.getEntitiesOfClass(
+                LeashFenceKnotEntity.class, new AABB((double)i - 1.0, (double)j - 1.0, (double)k - 1.0, (double)i + 1.0, (double)j + 1.0, (double)k + 1.0)
+        )) {
+            if (leashfenceknotentity.getPos().equals(pPos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    @Nullable
+    static Entity getLeashFenceKnotEntity(ServerLevel pLevel, BlockPos pPos) {
+        int i = pPos.getX();
+        int j = pPos.getY();
+        int k = pPos.getZ();
+
+        for (LeashFenceKnotEntity leashfenceknotentity : pLevel.getEntitiesOfClass(
+                LeashFenceKnotEntity.class, new AABB((double)i - 1.0, (double)j - 1.0, (double)k - 1.0, (double)i + 1.0, (double)j + 1.0, (double)k + 1.0)
+        )) {
+            if (leashfenceknotentity.getPos().equals(pPos)) {
+                return leashfenceknotentity;
+            }
+        }
+        return null;
+    }
+    static Entity createLeashKnotFence(ServerLevel pLevel, BlockPos pPos) {
+        LeashFenceKnotEntity leashfenceknotentity = new LeashFenceKnotEntity(pLevel, pPos);
+        pLevel.addFreshEntity(leashfenceknotentity);
+        return leashfenceknotentity;
     }
 }

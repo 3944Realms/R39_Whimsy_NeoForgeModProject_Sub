@@ -1,7 +1,16 @@
 {
-  "gamerule.RWN.TeleportWithLeashedPlayers": "传送被栓玩家",
-  "gamerule.RWN.TeleportWithLeashedPlayers.description": "传送时将被栓玩家与自己一起传送",
-  "leashedplayer.command.leash.message.leash.length.fail": "失败（内部错误）",
-  "leashedplayer.command.leash.message.leash.length.set": "%s的拴绳长度被设置为%f格",
-  "leashedplayer.command.leash.message.leash.length.show": "%s的拴绳长度为%f格"
+  "gamerule.LP.CreateLeashFenceKnotEntityIfAbsent": "如果缺失则创建栓绳结",
+  "gamerule.LP.CreateLeashFenceKnotEntityIfAbsent.description": "如果在栅栏处缺失栓绳结，则创建它",
+  "gamerule.LP.TeleportWithLeashedPlayers": "被栓玩家随玩家持有者传送",
+  "gamerule.LP.TeleportWithLeashedPlayers.description": "传送时将被栓玩家与持有者一起传送",
+  "leashedplayer.command.leash.message.leash.data.null": "%1$s沒有拴绳数据实体",
+  "leashedplayer.command.leash.message.leash.data.show": "%1$s的拴绳数据实体为%2$s",
+  "leashedplayer.command.leash.message.leash.leash_data.set": "%1$s拴绳数据实体被设置为%2$s",
+  "leashedplayer.command.leash.message.leash.leash_data.set.failed.diff_level": "%1$s和%2$s不在同一维度上",
+  "leashedplayer.command.leash.message.leash.leash_data.set.failed.forbid_same_entity": "禁止设置同一实体",
+  "leashedplayer.command.leash.message.leash.leash_data.set.failed.no_knot_exist_in_that_pos": "未找到栓绳结在(X:%f, Y:%f, Z:%f)处",
+  "leashedplayer.command.leash.message.leash.leash_data.set.failed.too_far": "%1$s到%2$s的距离超过了1.2倍 栓绳长度，原长:%3$s 格",
+  "leashedplayer.command.leash.message.leash.length.failed": "失败（内部错误,可能是你输的指令有误）",
+  "leashedplayer.command.leash.message.leash.length.set": "%1$s的拴绳长度被设置为%2$s格",
+  "leashedplayer.command.leash.message.leash.length.show": "%1$s的拴绳长度为%2$s格"
 }

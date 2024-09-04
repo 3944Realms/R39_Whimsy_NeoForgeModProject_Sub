@@ -3,6 +3,7 @@ package com.r3944realms.leashedplayer.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Either;
+import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
 import com.r3944realms.leashedplayer.modInterface.IPlayerRendererExtension;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
 import net.minecraft.client.Camera;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.UUID;
 
 @Mixin(PlayerRenderer.class)
@@ -57,6 +60,29 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
                 Player playerByUUID = level.getPlayerByUUID(delayedLeashInfo.left().get());
                 if (playerByUUID != null) {
                     renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, playerByUUID);
+                } else {
+                    float MaxLeashLength = ((ILivingEntityExtension) pEntity).getLeashLength() * 2f;
+                    List<Entity> entities = level.getEntities(
+                            null,
+                            new AABB(
+                                    pEntity.getX() - MaxLeashLength,
+                                    pEntity.getY() - MaxLeashLength,
+                                    pEntity.getZ() - MaxLeashLength,
+                                    pEntity.getX() + MaxLeashLength,
+                                    pEntity.getY() + MaxLeashLength,
+                                    pEntity.getZ() + MaxLeashLength
+                            )
+                    );
+                    Entity holder = null;
+                    for (Entity entity_ : entities) {
+                        if(entity_.getUUID().equals(delayedLeashInfo.left().get())) {
+                            holder = entity_;
+                            break;
+                        }
+                    }
+                    if (holder != null) {
+                        renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder);
+                    }
                 }
             }
         }

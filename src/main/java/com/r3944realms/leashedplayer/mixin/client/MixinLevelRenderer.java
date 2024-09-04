@@ -2,6 +2,7 @@ package com.r3944realms.leashedplayer.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
+import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
 import com.r3944realms.leashedplayer.modInterface.IPlayerRendererExtension;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
 import net.minecraft.client.Camera;
@@ -12,11 +13,13 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
@@ -27,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 @Mixin(LevelRenderer.class)
@@ -83,9 +87,33 @@ public abstract class MixinLevelRenderer {
                             playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, LeashFenceKnotEntity.getOrCreateKnot(level, delayedLeashInfo.right().get()));
                         } else if (delayedLeashInfo.right().isEmpty() && delayedLeashInfo.left().isPresent()) {
                             assert level != null;
+
                             Player playerByUUID = level.getPlayerByUUID(delayedLeashInfo.left().get());
                             if (playerByUUID != null) {
                                 playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, playerByUUID);
+                            } else {
+                                float MaxLeashLength = ((ILivingEntityExtension) abstractClientPlayer).getLeashLength() * 2f;
+                                List<Entity> entities = level.getEntities(
+                                        null,
+                                        new AABB(
+                                                abstractClientPlayer.getX() - MaxLeashLength,
+                                                abstractClientPlayer.getY() - MaxLeashLength,
+                                                abstractClientPlayer.getZ() - MaxLeashLength,
+                                                abstractClientPlayer.getX() + MaxLeashLength,
+                                                abstractClientPlayer.getY() + MaxLeashLength,
+                                                abstractClientPlayer.getZ() + MaxLeashLength
+                                        )
+                                );
+                                Entity holder = null;
+                                for (Entity entity_ : entities) {
+                                    if(entity_.getUUID().equals(delayedLeashInfo.left().get())) {
+                                        holder = entity_;
+                                        break;
+                                    }
+                                }
+                                if (holder != null) {
+                                    playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, holder);
+                                }
                             }
                         }
                     }

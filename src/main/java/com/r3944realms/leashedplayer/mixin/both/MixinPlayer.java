@@ -213,6 +213,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
     private void saveLeashData(@org.jetbrains.annotations.Nullable LeashData pLeashData) {
         CompoundTag compoundTag = new CompoundTag();
         this.writeLeashData(compoundTag, pLeashData);
+
         this.entityData.set(Pl$LEASH_DATA, compoundTag);
     }
     @SuppressWarnings("AddedMixinMembersNamePattern")
