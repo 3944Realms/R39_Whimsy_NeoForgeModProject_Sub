@@ -24,12 +24,12 @@ public class MixinServerGamePacketListenerImpl {
     @Shadow
     public ServerPlayer player;
     @Unique
-    private List<Entity> Whimsy$LeashPlayers = new ArrayList<>();
+    private List<Entity> Pl$LeashPlayers = new ArrayList<>();
     @Inject(method = {"teleport(DDDFFLjava/util/Set;)V"}, at = {@At("HEAD")})
     private void teleportHead(double pX, double pY, double pZ, float pYaw, float pPitch, Set<RelativeMovement> pRelativeSet, CallbackInfo ci) {
         try {
             //獲取Holder
-            this.Whimsy$LeashPlayers = ((PlayerLeashable)this.player).getLeashHolder() != null ? Collections.emptyList() : Objects.requireNonNull(this.player.getServer()).getPlayerList().getPlayers().stream().filter(serverPlayer -> (serverPlayer instanceof PlayerLeashable) && ((PlayerLeashable)serverPlayer).getLeashHolder() == this.player && player != serverPlayer).collect(Collectors.toList());
+            this.Pl$LeashPlayers = ((PlayerLeashable)this.player).getLeashHolder() != null ? Collections.emptyList() : Objects.requireNonNull(this.player.getServer()).getPlayerList().getPlayers().stream().filter(serverPlayer -> (serverPlayer instanceof PlayerLeashable) && ((PlayerLeashable)serverPlayer).getLeashHolder() == this.player && player != serverPlayer).collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Internal Error:",e);
         }
@@ -37,9 +37,9 @@ public class MixinServerGamePacketListenerImpl {
     @Inject(method = {"teleport(DDDFFLjava/util/Set;)V"}, at = {@At("TAIL")})
     private void teleportTail(double pX, double pY, double pZ, float pYaw, float pPitch, Set<RelativeMovement> pRelativeSet, CallbackInfo ci) {
         if(GameruleRegistry.getGameruleBoolValue(this.player.serverLevel(), TeleportWithLeashedPlayers.ID)) {
-            for (Entity whimsy$LeashPlayer : this.Whimsy$LeashPlayers) {
-                if(whimsy$LeashPlayer instanceof ServerPlayer) {
-                    if(whimsy$LeashPlayer instanceof PlayerLeashable playerLeashable) {
+            for (Entity Pl$LeashPlayer : this.Pl$LeashPlayers) {
+                if(Pl$LeashPlayer instanceof ServerPlayer) {
+                    if(Pl$LeashPlayer instanceof PlayerLeashable playerLeashable) {
                         playerLeashable.dropLeash(false,false);
                         if(((ServerPlayer) playerLeashable).serverLevel() == this.player.serverLevel()) {
                             ((ServerPlayer) playerLeashable).connection.teleport(pX, pY, pZ, pYaw, pPitch, pRelativeSet);
