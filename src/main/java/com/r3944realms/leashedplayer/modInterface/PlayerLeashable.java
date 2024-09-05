@@ -3,6 +3,7 @@ package com.r3944realms.leashedplayer.modInterface;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
@@ -56,6 +57,39 @@ public interface PlayerLeashable extends Leashable {
         //这边覆写去掉了乘坐相关的逻辑，即乘坐状态下也可以正常被栓住，不影响其乘坐状态
 
     }
+    @Nullable
+    static Entity getLeashDataEntity(@NotNull ServerPlayer serverPlayer , @NotNull ServerLevel serverLevel) {
+        LeashData leashDataFromEntityData = ((PlayerLeashable) serverPlayer).getLeashDataFromEntityData();
+        if (leashDataFromEntityData != null) {
+            return getLeashDataEntity(leashDataFromEntityData, serverLevel);
+        }
+        else return null;
+    }
+
+    static Entity getLeashDataEntityOrThrown(@NotNull ServerPlayer serverPlayer ,@NotNull ServerLevel serverLevel) throws Exception {
+        Entity leashedEntity = getLeashDataEntity(serverPlayer, serverLevel);
+        if(leashedEntity == null) throw new Exception("invalid");
+        else return leashedEntity;
+    }
+
+    @Nullable
+    static Entity getLeashDataEntity(@NotNull Leashable.LeashData leashDataFromEntityData, @NotNull ServerLevel level) {
+        if(leashDataFromEntityData.delayedLeashInfo != null) {
+            Optional<UUID> UUID = leashDataFromEntityData.delayedLeashInfo.left();
+            Optional<BlockPos> BlockPos = leashDataFromEntityData.delayedLeashInfo.right();
+            if (UUID.isPresent()) {
+                return level.getEntity(UUID.get());
+            } else return BlockPos.map(pos -> LeashFenceKnotEntity.getOrCreateKnot(level, pos)).orElse(null);
+        }
+        else if(leashDataFromEntityData.leashHolder != null) {
+            return leashDataFromEntityData.leashHolder;
+        }
+        else if(leashDataFromEntityData.delayedLeashHolderId != 0) {
+            return level.getEntity(leashDataFromEntityData.delayedLeashHolderId);
+        }
+        else return null;
+    }
+
     static Entity getLeashDataEntityOrThrown(@NotNull Leashable.LeashData leashDataFromEntityData, @NotNull ServerLevel level) throws Exception {
         if(leashDataFromEntityData.delayedLeashInfo != null) {
             Optional<UUID> UUID = leashDataFromEntityData.delayedLeashInfo.left();

@@ -3,6 +3,8 @@ package com.r3944realms.leashedplayer.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Either;
+import com.r3944realms.leashedplayer.LeashedPlayer;
+import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
 import com.r3944realms.leashedplayer.modInterface.IPlayerRendererExtension;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
@@ -61,9 +63,10 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
                 if (playerByUUID != null) {
                     renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, playerByUUID);
                 } else {
-                    float MaxLeashLength = ((ILivingEntityExtension) pEntity).getLeashLength() * 2f;
+                    float breakDistanceTime = (leashDataFromEntityData.leashHolder instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
+                    float MaxLeashLength = ((ILivingEntityExtension) pEntity).getLeashLength() * breakDistanceTime;
                     List<Entity> entities = level.getEntities(
-                            null,
+                    null,
                             new AABB(
                                     pEntity.getX() - MaxLeashLength,
                                     pEntity.getY() - MaxLeashLength,
@@ -81,7 +84,10 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
                         }
                     }
                     if (holder != null) {
-                        renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder);
+                        if(holder instanceof LeashRopeArrow) {
+                            renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder, new Vec3(0,-0.09, 0));//TODO: 待擴展Vec3
+                        }
+                        else renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder);
                     }
                 }
             }
@@ -156,6 +162,7 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
      * <h1> 总结 </h1>
      * 这些数学运算主要用于计算实体在三维空间中的位置和方向，以确保在渲染链状结构（如拴住的绳索）时，链条能够跟随实体的移动和旋转并正确显示。在图形编程中，这些计算非常常见，尤其是在处理旋转、插值和光照效果时。
      */
+
     @SuppressWarnings("AddedMixinMembersNamePattern")
     @Unique
     public <E extends net.minecraft.world.entity.Entity> void renderLeashForCamera(
@@ -163,13 +170,14 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
             float partialTick,
             com.mojang.blaze3d.vertex.PoseStack poseStack,
             net.minecraft.client.renderer.MultiBufferSource bufferSource,
-            E leashHolder
+            E leashHolder,
+            Vec3 holderOffset
     ) {
 
         poseStack.pushPose();
 
         // 获得绳索持有者的位置
-        Vec3 leashHolderPosition = leashHolder.getRopeHoldPosition(partialTick);
+        Vec3 leashHolderPosition = leashHolder.getRopeHoldPosition(partialTick).add(holderOffset);
 
         // 获取当前观察的实体
         Entity cameraEntity = camera.getEntity();
@@ -223,6 +231,43 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
         }
 
         poseStack.popPose();
+    }
+    protected <E extends Entity> void renderLeash(AbstractClientPlayer pEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, E pLeashHolder, Vec3 holderOffset) {
+        pPoseStack.pushPose();
+        Vec3 vec3 = pLeashHolder.getRopeHoldPosition(pPartialTick).add(holderOffset);
+        double d0 = (double)(pEntity.getPreciseBodyRotation(pPartialTick) * (float) (Math.PI / 180.0)) + (Math.PI / 2);
+        Vec3 vec31 = pEntity.getLeashOffset(pPartialTick);
+        double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
+        double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
+        double d3 = Mth.lerp(pPartialTick, pEntity.xo, pEntity.getX()) + d1;
+        double d4 = Mth.lerp(pPartialTick, pEntity.yo, pEntity.getY()) + vec31.y;
+        double d5 = Mth.lerp(pPartialTick, pEntity.zo, pEntity.getZ()) + d2;
+        pPoseStack.translate(d1, vec31.y, d2);
+        float f = (float)(vec3.x - d3);
+        float f1 = (float)(vec3.y - d4);
+        float f2 = (float)(vec3.z - d5);
+        float f3 = 0.025F;
+        VertexConsumer vertexconsumer = pBufferSource.getBuffer(RenderType.leash());
+        Matrix4f matrix4f = pPoseStack.last().pose();
+        float f4 = Mth.invSqrt(f * f + f2 * f2) * 0.025F / 2.0F;
+        float f5 = f2 * f4;
+        float f6 = f * f4;
+        BlockPos blockpos = BlockPos.containing(pEntity.getEyePosition(pPartialTick));
+        BlockPos blockpos1 = BlockPos.containing(pLeashHolder.getEyePosition(pPartialTick));
+        int i = this.getBlockLightLevel(pEntity, blockpos);
+        int j = 0;
+        int k = pEntity.level().getBrightness(LightLayer.SKY, blockpos);
+        int l = pEntity.level().getBrightness(LightLayer.SKY, blockpos1);
+
+        for (int i1 = 0; i1 <= 24; i1++) {
+            addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, i1, false);
+        }
+
+        for (int j1 = 24; j1 >= 0; j1--) {
+            addVertexPair(vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true);
+        }
+
+        pPoseStack.popPose();
     }
 
 }
