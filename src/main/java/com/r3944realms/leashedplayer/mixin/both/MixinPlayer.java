@@ -1,5 +1,9 @@
 package com.r3944realms.leashedplayer.mixin.both;
 
+import com.r3944realms.leashedplayer.LeashedPlayer;
+import com.r3944realms.leashedplayer.config.LeashPlayerCommonConfig;
+import com.r3944realms.leashedplayer.content.commands.LeashCommand;
+import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
 import net.minecraft.nbt.CompoundTag;
@@ -7,10 +11,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -22,11 +28,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity implements PlayerLeashable {
-
     @Unique
     @Nullable
     private LeashData Pl$LeashData;//Data
@@ -53,40 +59,54 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
     }
     @Unique
     private static void Pl$UpdateLeash(Entity holderEntity, Entity restrainedEntity) {
-        if(holderEntity == null || holderEntity.level() != restrainedEntity.level())
+        if (holderEntity == null || holderEntity.level() != restrainedEntity.level()) {
             return;
-        float leashLength = 6.0f;
-        if(restrainedEntity instanceof ILivingEntityExtension iEntity) {
-            //获取长度
-            float leashLengthFormValue = iEntity.getLeashLength();
-            leashLength = leashLengthFormValue > 6 ? leashLengthFormValue : 6;
-        }
-        //两者距离
-        float distance = holderEntity.distanceTo(restrainedEntity);
-        //大于长度情况
-        if(distance > leashLength) {
-            //作用对象（实体所坐载体还是实体【根据isPassenger来判断】
-            Entity applyMovementEntity = restrainedEntity.isPassenger() ? restrainedEntity.getVehicle() : restrainedEntity;
-            if(applyMovementEntity != null){
-                double dX = (holderEntity.getX() - applyMovementEntity.getX()) / (double) distance;
-                double dY = (holderEntity.getY() - applyMovementEntity.getY()) / (double) distance;
-                double dZ = (holderEntity.getZ() - applyMovementEntity.getZ()) / (double) distance;
-                //给予作用实体其向holderEntity的一个速度动量
-                applyMovementEntity.setDeltaMovement(
-                        applyMovementEntity.getDeltaMovement().add(
-                                Math.copySign(dX * dX * 0.4d, dX),
-                                Math.copySign(dY * dY * 0.4d, dY),
-                                Math.copySign(dZ * dZ * 0.4d, dZ)
-                        )
-                );
-                //刹车，避免偏激移动
-                Whimsy$Brake(applyMovementEntity, 1, 1, 1);
-            }
         }
 
-        //降低坠落伤害
+        float leashLength = LeashCommand.MIN_VALUE;
+        if (restrainedEntity instanceof ILivingEntityExtension iEntity) {
+            // 获取绳长
+            float leashLengthFormValue = iEntity.getLeashLength();
+            leashLength = leashLengthFormValue > LeashCommand.MIN_VALUE ? leashLengthFormValue : LeashCommand.MIN_VALUE;
+        }
+
+        // 两者距离
+        float distance = holderEntity.distanceTo(restrainedEntity);
+        Entity applyMovementEntity = restrainedEntity.isPassenger() ? restrainedEntity.getVehicle() : restrainedEntity;
+
+        // 仅当距离大于绳长时施加拉力
+        if (applyMovementEntity != null && distance > leashLength) {
+            // 计算朝向持有者的拉力方向
+            double dX = (holderEntity.getX() - applyMovementEntity.getX()) / (double) distance;
+            double dY = (holderEntity.getY() - applyMovementEntity.getY()) / (double) distance;
+            double dZ = (holderEntity.getZ() - applyMovementEntity.getZ()) / (double) distance;
+
+            // 拉力大小，距离越远拉力越强，但施加一个最大限制
+            double pullStrength = Math.min((distance - leashLength) * 0.1, 1.0); // 限制最大拉力
+            applyMovementEntity.setDeltaMovement(
+                    applyMovementEntity.getDeltaMovement().add(
+                            dX * pullStrength,
+                            dY * pullStrength,
+                            dZ * pullStrength
+                    )
+            );
+
+            // 控制速度不要过快，避免偏激移动
+            Whimsy$Brake(applyMovementEntity, entity -> {
+                Vec3 deltaMovement = entity.getDeltaMovement();
+                entity.setDeltaMovement(
+                        Math.min(Math.abs(deltaMovement.x), 1.0) * Math.signum(deltaMovement.x),
+                        Math.min(Math.abs(deltaMovement.y), 1.0) * Math.signum(deltaMovement.y),
+                        Math.min(Math.abs(deltaMovement.z), 1.0) * Math.signum(deltaMovement.z)
+                );
+                entity.hurtMarked = true;
+            });
+        }
+
+        // 降低坠落伤害
         restrainedEntity.checkSlowFallDistance();
     }
+
 
     /**
      * 刹车（
@@ -98,9 +118,9 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
     @Unique
     private static void Whimsy$Brake(Entity pEntity, double pMaxX, double pMaxY, double pMaxZ) {
         Vec3 deltaMovement = pEntity.getDeltaMovement();
-        double dX = deltaMovement.x > pMaxX ? 0 : deltaMovement.x;
-        double dY = deltaMovement.y > pMaxY ? 0 : deltaMovement.y;
-        double dZ = deltaMovement.z > pMaxZ ? 0 : deltaMovement.z;
+        double dX = Math.abs(deltaMovement.x) > pMaxX ? 0 : deltaMovement.x;
+        double dY = Math.abs(deltaMovement.y) > pMaxY ? 0 : deltaMovement.y;
+        double dZ = Math.abs(deltaMovement.z) > pMaxZ ? 0 : deltaMovement.z;
         pEntity.setDeltaMovement(dX, dY,dZ);
         pEntity.hurtMarked = true;
     }
@@ -115,9 +135,9 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         if(pOpt == null) {
             consumer = entity -> {
                 Vec3 deltaMovement = entity.getDeltaMovement();
-                double dX = deltaMovement.x > 1 ? 0 : deltaMovement.x;
-                double dY = deltaMovement.y > 1 ? 0 : deltaMovement.y;
-                double dZ = deltaMovement.z > 1 ? 0 : deltaMovement.z;
+                double dX = Math.abs(deltaMovement.x) > 1 ? 0 : deltaMovement.x;
+                double dY = Math.abs(deltaMovement.y) > 1 ? 0 : deltaMovement.y;
+                double dZ = Math.abs(deltaMovement.z) > 1 ? 0 : deltaMovement.z;
                 entity.setDeltaMovement(dX, dY,dZ);
                 entity.hurtMarked = true;
             };
@@ -130,27 +150,34 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         if(this.Pl$LeashData == null) return;//没有Data直接退出
         //info -> Holder整理
         Pl$RestoreLeashFormSave();
-        //默认值设为6.0f距离
-        float leashLength = 6.0f;
+        //默认值设为
+        float leashLength = LeashCommand.MIN_VALUE;
         Entity entity = this.Pl$LeashData.leashHolder;
         //保存数据
         saveLeashData(Pl$LeashData);
         if(this instanceof ILivingEntityExtension iEntityExtension) {
             //获取设定值
             float leashLengthSelf = iEntityExtension.getLeashLength();
-            leashLength = leashLengthSelf > 6 ? leashLengthSelf : 6;
+            leashLength = leashLengthSelf > LeashCommand.MIN_VALUE ? leashLengthSelf : LeashCommand.MIN_VALUE;
         }
         if (entity != null) {
-            if(!isAlive() || !entity.isAlive() || distanceTo(entity) > Math.max(leashLength * 2.0f, 10.0f)){
+            float breakDistanceTime = (entity instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
+            if(!isAlive() || !entity.isAlive() || distanceTo(entity) > Math.max(leashLength * breakDistanceTime, LeashCommand.MIN_VALUE * breakDistanceTime)){
                 //玩家死亡 或 持有者不存在 或 距离大于设定值的2倍（长度2倍若低于10格，则选10格） ，
                 // 则取消拴绳关系，并掉落拴绳
-                dropLeash(true, true);
-            } else if(distanceTo(entity) > leashLength * 1.3f) {
-                //大于1.3倍绳长则会让其跳跃（在<1.25格阻拦情况下，跳跃阻拦
-                jumpFromGround();
+                boolean shouldDrop = !(entity instanceof LeashRopeArrow);
+                dropLeash(true, shouldDrop);
+            } else if(distanceTo(entity) > leashLength * 0.65f * breakDistanceTime && entity.onGround()) {
+                //大于1.3倍绳长则会让其跳跃（在<1.25格阻拦情况下，跳跃阻拦//TODO:待擴展
+                Entity applyMovementEntity = this.isPassenger() ? this.getVehicle() : this;
+                if(applyMovementEntity instanceof LivingEntity applyMovementLivingEntity) {
+                    applyMovementLivingEntity.jumpFromGround();
+                }
+
             }
         }
     }
+
     @Override
     public Entity getLeashHolder() {
         if (Pl$LeashData == null) return null;
@@ -176,7 +203,8 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
             if(Pl$LeashData.leashHolder != null) {//且LeashHolder不为null，则直接用它
                 setLeashedTo(Pl$LeashData.leashHolder, true);
                 return;
-            }  return;
+            }
+            return;
 
         }
         if(this.Pl$LeashData.delayedLeashInfo.left().isPresent()) {

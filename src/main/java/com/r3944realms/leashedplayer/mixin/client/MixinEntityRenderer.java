@@ -1,13 +1,17 @@
 package com.r3944realms.leashedplayer.mixin.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
@@ -22,8 +26,9 @@ public abstract class MixinEntityRenderer {
     private @NotNull Vec3 ret(Entity instance, float pPartialTick) {
         if(instance instanceof AbstractClientPlayer) {
             //为了使拴绳在在第三视角下位于玩家脖子处
-            return  instance.getLeashOffset(pPartialTick).add(0, -0.2, -0.2);
+            return  instance.getLeashOffset(pPartialTick).add(0, -0.2, -0.2);//TODO:待擴展Vec3
         }
         return instance.getLeashOffset(pPartialTick);//非实现这个接口则不变
     }
+
 }
