@@ -15,7 +15,6 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Leashable;
@@ -115,7 +114,7 @@ public abstract class MixinLevelRenderer {
                                 }
                                 if (holder != null) {
                                     if(holder instanceof LeashRopeArrow) {
-                                        playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, holder, new Vec3(0.,-0.09, 0));//TODO: 待擴展Vec3
+                                        playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, holder, new Vec3(0.,-0.09, 0));//TODO: 待擴展Vec3吗？
                                     }
                                      else playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, holder);
                                 }

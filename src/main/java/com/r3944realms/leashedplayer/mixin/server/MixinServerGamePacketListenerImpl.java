@@ -3,7 +3,6 @@ package com.r3944realms.leashedplayer.mixin.server;
 import com.r3944realms.leashedplayer.content.gamerules.GameruleRegistry;
 import com.r3944realms.leashedplayer.content.gamerules.Server.TeleportWithLeashedPlayers;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static com.r3944realms.leashedplayer.utils.Logger.logger;
 @Mixin(ServerGamePacketListenerImpl.class)
 public class MixinServerGamePacketListenerImpl {

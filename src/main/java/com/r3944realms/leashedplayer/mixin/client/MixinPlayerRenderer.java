@@ -85,7 +85,7 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
                     }
                     if (holder != null) {
                         if(holder instanceof LeashRopeArrow) {
-                            renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder, new Vec3(0,-0.09, 0));//TODO: 待擴展Vec3
+                            renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder, new Vec3(0,0, 0));//TODO: 待擴展Vec3
                         }
                         else renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, holder);
                     }
@@ -232,11 +232,13 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
 
         poseStack.popPose();
     }
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Unique
     protected <E extends Entity> void renderLeash(AbstractClientPlayer pEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, E pLeashHolder, Vec3 holderOffset) {
         pPoseStack.pushPose();
         Vec3 vec3 = pLeashHolder.getRopeHoldPosition(pPartialTick).add(holderOffset);
         double d0 = (double)(pEntity.getPreciseBodyRotation(pPartialTick) * (float) (Math.PI / 180.0)) + (Math.PI / 2);
-        Vec3 vec31 = pEntity.getLeashOffset(pPartialTick);
+        Vec3 vec31 = pEntity.getLeashOffset(pPartialTick).add(0, -0.2, -0.2);//TODO:待擴展Vec3);
         double d1 = Math.cos(d0) * vec31.z + Math.sin(d0) * vec31.x;
         double d2 = Math.sin(d0) * vec31.z - Math.cos(d0) * vec31.x;
         double d3 = Mth.lerp(pPartialTick, pEntity.xo, pEntity.getX()) + d1;

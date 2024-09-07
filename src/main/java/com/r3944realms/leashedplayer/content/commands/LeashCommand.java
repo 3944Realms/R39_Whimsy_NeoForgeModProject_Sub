@@ -4,7 +4,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.r3944realms.leashedplayer.config.LeashPlayerCommonConfig;
@@ -26,6 +25,7 @@ import net.minecraft.world.entity.Leashable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class LeashCommand {
@@ -79,9 +79,23 @@ public class LeashCommand {
         Command<CommandSourceStack> getRefPlayerLeashLength = context -> {
             CommandSourceStack source = context.getSource();
             try {
-                ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                ServerPlayer player = EntityArgument.getPlayer(context, "targetPlayer");
                 float leashLength = ((ILivingEntityExtension)player).getLeashLength();
                 source.sendSuccess(() -> Component.translatable(LEASH_LENGTH_SHOW, player.getDisplayName(), leashLength), true);
+            } catch (Exception e) {
+                source.sendFailure(Component.translatable(LEASH_FAILED));
+                return -1;
+            }
+            return 0;
+        };
+        Command<CommandSourceStack> getRefPlayersLeashLength = context -> {
+            CommandSourceStack source = context.getSource();
+            try {
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayers");
+                playerCol.forEach(player -> {
+                    float leashLength = ((ILivingEntityExtension) player).getLeashLength();
+                    source.sendSuccess(() -> Component.translatable(LEASH_LENGTH_SHOW, player.getDisplayName(), leashLength), true);
+                });
             } catch (Exception e) {
                 source.sendFailure(Component.translatable(LEASH_FAILED));
                 return -1;
@@ -101,13 +115,32 @@ public class LeashCommand {
             }
             return 0;
         };
-        Command<CommandSourceStack> setLengthLeashLength = context -> {
+        Command<CommandSourceStack> setRefPlayerLengthLeashLength = context -> {
             CommandSourceStack source = context.getSource();
             try {
-                ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                ServerPlayer player = EntityArgument.getPlayer(context, "targetPlayer");
                 float leashLength = context.getArgument("leashLength", Float.class);
                 ((ILivingEntityExtension)player).setLeashLength(leashLength);
                 source.sendSuccess(() -> Component.translatable(LEASH_LENGTH_SET, player.getDisplayName(), leashLength), true);
+            } catch (Exception e) {
+                source.sendFailure(Component.translatable(LEASH_FAILED));
+                return -1;
+            }
+            return 0;
+        };
+        Command<CommandSourceStack> setRefPlayersLengthLeashLength = context -> {
+            CommandSourceStack source = context.getSource();
+            float leashLength = context.getArgument("leashLength", Float.class);
+            try {
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayer");
+                playerCol.forEach(player -> {
+                    try {
+                        ((ILivingEntityExtension)player).setLeashLength(leashLength);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
             } catch (Exception e) {
                 source.sendFailure(Component.translatable(LEASH_FAILED));
                 return -1;
@@ -134,6 +167,24 @@ public class LeashCommand {
                 ServerPlayer player = EntityArgument.getPlayer(context, "targetPlayer");
                 Integer x = LeashLengthGetResultInt(player, source);
                 if (x != null) return x;
+            } catch (Exception e) {
+                source.sendFailure(Component.translatable(LEASH_FAILED));
+                return -1;
+            }
+            return 0;
+        };
+        Command<CommandSourceStack> getRefPlayersLeashData = context -> {
+            CommandSourceStack source = context.getSource();
+            try {
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayers");
+                playerCol.forEach(player -> {
+                    try {
+                        LeashLengthGetResultInt(player, source);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
             } catch (Exception e) {
                 source.sendFailure(Component.translatable(LEASH_FAILED));
                 return -1;
@@ -182,6 +233,37 @@ public class LeashCommand {
             }
             return 0;
         };
+        Command<CommandSourceStack> setRefPlayersLeashDataEntity = context -> {
+            CommandSourceStack source = context.getSource();
+            try {
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayers");
+                playerCol.forEach(player -> {
+                    try {
+                        LeashDataEntitySetResultInt(context, player, source);
+                    } catch (CommandSyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            } catch (Exception e) {
+                source.sendFailure(Component.translatable(LEASH_FAILED));
+                return -1;
+            }
+            return 0;
+        };
+        Command<CommandSourceStack> setRefPlayersLeashDataByBlockPos = context -> {
+            CommandSourceStack source = context.getSource();
+            try {
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayers");
+                playerCol.forEach(player -> {
+                    LeashDataBlockPosSetResultInt(context, source, player);
+                });
+
+            } catch (Exception e) {
+                source.sendFailure(Component.translatable(LEASH_FAILED));
+                return -1;
+            }
+            return 0;
+        };
         Command<CommandSourceStack> setRefPlayerLeashDataByBlockPos = context -> {
             CommandSourceStack source = context.getSource();
             try {
@@ -195,6 +277,7 @@ public class LeashCommand {
             }
             return 0;
         };
+
         Command<CommandSourceStack> clearSelfLeashData = context -> {
             CommandSourceStack source = context.getSource();
             try {
@@ -212,8 +295,25 @@ public class LeashCommand {
             CommandSourceStack source = context.getSource();
             try {
                 ServerPlayer player = EntityArgument.getPlayer(context, "targetPlayer");
-                Integer x = LeashDataClearResultInt(source, PlayerLeashable.getLeashDataEntityOrThrown(player, source.getLevel()),player);
-                if (x != null) return x;
+                Integer x = LeashDataClearResultInt(source, PlayerLeashable.getLeashDataEntity(player, source.getLevel()),player);
+
+            } catch (Exception e) {
+                source.sendFailure(Component.translatable(LEASH_FAILED));
+                return -1;
+            }
+            return 0;
+        };
+        Command<CommandSourceStack> clearRefPlayersLeashData = context -> {
+            CommandSourceStack source = context.getSource();
+            try {
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayers");
+                playerCol.forEach(player -> {
+                    try {
+                        LeashDataClearResultInt(source, PlayerLeashable.getLeashDataEntity(player, source.getLevel()),player);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
             } catch (Exception e) {
                 source.sendFailure(Component.translatable(LEASH_FAILED));
@@ -232,11 +332,19 @@ public class LeashCommand {
 
         LiteralArgumentBuilder<CommandSourceStack> RefPlayerLeashLength = $$leashRoot.then(
                 Commands.literal("length")
-                        .then(Commands.argument("player", EntityArgument.player()).executes(getRefPlayerLeashLength)
+                        .then(Commands.argument("targetPlayer", EntityArgument.player()).executes(getRefPlayerLeashLength)
                                 .then(Commands.literal("get").executes(getRefPlayerLeashLength))
                                 .then(Commands.literal("set").requires(cs -> cs.hasPermission(2))
                                         .then(
-                                                Commands.argument("leashLength", FloatArgumentType.floatArg(MIN_VALUE, MAX_VALUE)).executes(setLengthLeashLength)
+                                                Commands.argument("leashLength", FloatArgumentType.floatArg(MIN_VALUE, MAX_VALUE)).executes(setRefPlayerLengthLeashLength)
+                                        )
+                                )
+                        )
+                        .then(Commands.argument("targetPlayers", EntityArgument.players()).executes(getRefPlayerLeashLength)
+                                .then(Commands.literal("get").executes(getRefPlayerLeashLength))
+                                .then(Commands.literal("set").requires(cs -> cs.hasPermission(2))
+                                        .then(
+                                                Commands.argument("leashLength", FloatArgumentType.floatArg(MIN_VALUE, MAX_VALUE)).executes(setRefPlayerLengthLeashLength)
                                         )
                                 )
                         )
@@ -256,9 +364,22 @@ public class LeashCommand {
                                                 .executes(setRefPlayerLeashDataByBlockPos)
                                         )
                                 )
-                                .then(Commands.literal("clear").requires(cs -> cs.hasPermission(2)).executes(clearSelfLeashData))
+                                .then(Commands.literal("clear").requires(cs -> cs.hasPermission(2)).executes(clearRefPlayerLeashData))
                         )
-        );
+                        .then(Commands.argument("targetPlayers", EntityArgument.players()).executes(getRefPlayersLeashData)
+                                .then(Commands.literal("get")
+                                        .executes(getRefPlayerLeashData)
+                                )
+                                .then(Commands.literal("set").requires(cs -> cs.hasPermission(2))
+                                        .then(Commands.argument("holderEntity", EntityArgument.entity())
+                                                .executes(setRefPlayersLeashDataEntity)
+                                        )
+                                        .then(Commands.argument("BlockPos", BlockPosArgument.blockPos())
+                                                .executes(setRefPlayersLeashDataByBlockPos)
+                                        )
+                                )
+                                .then(Commands.literal("clear").requires(cs -> cs.hasPermission(2)).executes(clearRefPlayersLeashData))
+        ));
 
         LiteralArgumentBuilder<CommandSourceStack> SelfData = $$leashRoot.then(
                 Commands.literal("data")
@@ -353,6 +474,7 @@ public class LeashCommand {
         source.sendSuccess(() -> Component.translatable(LEASH_DATA_SET, targetPlayerDisplayName, leashDataEntityDisplayName), true);
         return null;
     }
+
     private static @Nullable Integer LeashDataClearResultInt(CommandSourceStack source, Entity leashDataEntity, ServerPlayer serverPlayer) {
        if(leashDataEntity == null) {
            source.sendFailure(Component.translatable(LEASH_DATA_CLEAR_FAILED_NO_DATA, serverPlayer.getDisplayName()));
