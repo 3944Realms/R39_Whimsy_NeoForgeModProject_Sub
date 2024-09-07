@@ -7,10 +7,12 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class LeashRopeArrowItem extends ArrowItem {
     public static final String descKey = "item.leash_rope_arrow.description";
@@ -26,4 +28,8 @@ public class LeashRopeArrowItem extends ArrowItem {
     public @NotNull Component getDescription() {
         return Component.translatable(descKey).withStyle(ChatFormatting.GRAY);
     }
+    public void appendHoverText(@NotNull ItemStack pStack, Item.@NotNull TooltipContext pContext, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pTooltipFlag) {
+        //TODO:也许会做
+    }
+
 }

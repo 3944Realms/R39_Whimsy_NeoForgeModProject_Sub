@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/bow",
+  "textures": {
+    "layer0": "leashedplayer:item/bow_lra_pulling_1"
+  }
+}

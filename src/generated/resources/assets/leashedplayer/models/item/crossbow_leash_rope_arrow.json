@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/crossbow",
+  "textures": {
+    "layer0": "leashedplayer:item/crossbow_leash_rope_arrow"
+  }
+}

@@ -2,14 +2,12 @@ package com.r3944realms.leashedplayer.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.function.Predicate;
-
 public class LeashPlayerCommonConfig {
     public static ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.ConfigValue<String> LeashedPlayerModCommandPrefix;
     public static final ModConfigSpec.BooleanValue EnableLeashPlayerCommandPrefix;
-    public static ModConfigSpec.IntValue MinimumLeashLengthCanBeSet, MaximumLeashLengthCanBeSet;
+    public static ModConfigSpec.IntValue MinimumLeashLengthCanBeSet, MaximumLeashLengthCanBeSet, TheLeashArrowMaxLifeTime;
     public static ModConfigSpec.ConfigValue<Float> TheMultipleThatLeashRopeArrowBreakLength, TheLeashBreakLengthTimesBase;
     static {
         BUILDER.comment("Leash Player Config");
@@ -23,7 +21,7 @@ public class LeashPlayerCommonConfig {
 
             BUILDER.push("Leash Rope Arrow");
                 TheMultipleThatLeashRopeArrowBreakLength = BUILDER.comment("How many times is the length of the arrow rope based on BreakLength TimeBase", "[ Default : 5.0f, Invalid Range:[1.0f, 10.0f] ]").define("TheMultipleArrowBreak", 5.0f, o -> (o instanceof Float f) && f >= 2.0f && f <= 10.0f);
-
+                TheLeashArrowMaxLifeTime = BUILDER.comment("If the LeashArrowEntity's life is bigger than this value ,it will be discrad", "[ Default : 2400, Invalid Range:[1200 , 10240]").defineInRange("TheLeashArrowMaxLifeTime",2400, 1200, 10240);
         BUILDER.pop();
 
             BUILDER.push("Misc");

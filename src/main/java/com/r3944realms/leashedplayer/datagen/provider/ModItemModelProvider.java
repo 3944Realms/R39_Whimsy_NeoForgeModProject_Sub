@@ -1,10 +1,13 @@
 package com.r3944realms.leashedplayer.datagen.provider;
 
 
+import com.r3944realms.leashedplayer.LeashedPlayer;
 import com.r3944realms.leashedplayer.datagen.LanguageAndOtherData.ModLangKeyValue;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.ArrayList;
@@ -31,6 +34,18 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
     private void AdvancedModItemModelRegister() {
         /*手动生成更快，其实*/
+        getBuilder("crossbow_leash_rope_arrow")
+                .parent(new ModelFile.UncheckedModelFile("item/crossbow"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(LeashedPlayer.MOD_ID, "item/crossbow_leash_rope_arrow"));
+        getBuilder("bow_lra_pulling_0")
+                .parent(new ModelFile.UncheckedModelFile("item/bow"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(LeashedPlayer.MOD_ID, "item/bow_lra_pulling_0"));
+        getBuilder("bow_lra_pulling_1")
+                .parent(new ModelFile.UncheckedModelFile("item/bow"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(LeashedPlayer.MOD_ID, "item/bow_lra_pulling_1"));
+        getBuilder("bow_lra_pulling_2")
+                .parent(new ModelFile.UncheckedModelFile("item/bow"))
+                .texture("layer0", ResourceLocation.fromNamespaceAndPath(LeashedPlayer.MOD_ID, "item/bow_lra_pulling_2"));
     }
 
     @Override

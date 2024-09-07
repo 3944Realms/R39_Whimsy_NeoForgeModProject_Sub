@@ -17,6 +17,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntityExtension {
+    @Unique
+    protected int Pl$LeashKeepTick;//保存状态，当超过断裂绳长时若LeashKeepTick大于0，则不断裂
+
     public MixinLivingEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -33,6 +36,17 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
     @Override
     public void setLeashLength(float length) {
         this.entityData.set(DATA_ENTITY_LEASH_LENGTH, length);
+    }
+
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public void setKeepLeashTick(int keepTick) {
+        this.Pl$LeashKeepTick = Math.max(keepTick, 0);
+    }
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public int getKeepLeashTick() {
+        return this.Pl$LeashKeepTick;
     }
 
     @Inject(method = {"defineSynchedData"}, at = {@At("TAIL")})

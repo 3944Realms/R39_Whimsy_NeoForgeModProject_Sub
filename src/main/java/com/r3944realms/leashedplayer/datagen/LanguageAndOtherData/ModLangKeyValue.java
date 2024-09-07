@@ -1,9 +1,9 @@
 package com.r3944realms.leashedplayer.datagen.LanguageAndOtherData;
 
 import com.r3944realms.leashedplayer.content.commands.LeashCommand;
-import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.gamerules.Server.CreateLeashFenceKnotEntityIfAbsent;
+import com.r3944realms.leashedplayer.content.gamerules.Server.KeepLeashNotDropTime;
 import com.r3944realms.leashedplayer.content.gamerules.Server.TeleportWithLeashedPlayers;
 import com.r3944realms.leashedplayer.content.items.LeashRopeArrowItem;
 import com.r3944realms.leashedplayer.content.items.ModCreativeTab;
@@ -44,10 +44,11 @@ public enum ModLangKeyValue {
     //GAME_RULE_NAME
     TELEPORT_WITH_LEASHED_PLAYERS(TeleportWithLeashedPlayers.NAME_KEY, ModPartEnum.NAME, "Teleport leashed player with player holder", "被拴玩家随玩家持有者传送", "被拴玩家随玩家持有者傳送" ,false),
     CREATE_LEASH_FENCE_KNOT_ENTITY_IF_ABSENT(CreateLeashFenceKnotEntityIfAbsent.NAME_KEY, ModPartEnum.NAME, "Create Leash Fence Knot Entity if absent", "如果缺失则创建拴绳结", "如果缺失則創建拴繩結", false),
+    KEEP_LEASH_NOT_DROP_TIME(KeepLeashNotDropTime.NAME_KEY, ModPartEnum.NAME, "Keep leash alive Time", "保持拴绳不掉落的时间", "保持其不掉落的時間", false),
     //GAME_RULE_DESCRIPTION
     TELEPORT_WITH_LEASHED_DESCRIPTION(TeleportWithLeashedPlayers.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION, "Holder will teleport with their leashed players ", "传送时将被拴玩家与持有者一起传送", "將被拴玩家將隨持有者一起傳送" ,false),
-    CREATE_LEASH_FENCE_KNOT_ENTITY_IF_ABSENT_DESCRIPTION(CreateLeashFenceKnotEntityIfAbsent.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION, "Create LeashKnot Entity if it's absent on fence", "如果在栅栏处缺失拴绳结，则创建它", "如果在柵欄処缺失拴繩結，則創建它",false),
-
+    CREATE_LEASH_FENCE_KNOT_ENTITY_IF_ABSENT_DESCRIPTION(CreateLeashFenceKnotEntityIfAbsent.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION, "Create LeashKnot Entity if it's absent on fence", "如果在栅栏处缺失拴绳结，则创建它", "如果在柵欄処缺失拴繩結，則創建它", false),
+    KEEP_LEASH_NOT_DROP_TIME_DESCRIPTION(KeepLeashNotDropTime.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION,"The time of Keep new leash which has far distance alive (Tick)", "当距离过远时，保持新建拴绳不掉落的时间 （刻）", "儅距離過遠時，保持其不掉落的時間（刻）", false),
     ;
     private final Supplier<?> supplier;
     private String key;

@@ -1,7 +1,6 @@
 package com.r3944realms.leashedplayer.mixin.both;
 
 import com.r3944realms.leashedplayer.LeashedPlayer;
-import com.r3944realms.leashedplayer.config.LeashPlayerCommonConfig;
 import com.r3944realms.leashedplayer.content.commands.LeashCommand;
 import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
@@ -11,12 +10,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -28,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Mixin(Player.class)
@@ -36,6 +32,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
     @Unique
     @Nullable
     private LeashData Pl$LeashData;//Data
+
 
     @SuppressWarnings("WrongEntityDataParameterClass")
     @Unique//客户端与服务器端的实体同步数据
@@ -146,8 +143,10 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
     }
     @Unique
     protected void Pl$tickLeash() {
-
         if(this.Pl$LeashData == null) return;//没有Data直接退出
+        ILivingEntityExtension self = (ILivingEntityExtension) this;
+        int keepLeashTick = self.getKeepLeashTick();
+
         //info -> Holder整理
         Pl$RestoreLeashFormSave();
         //默认值设为
@@ -155,26 +154,26 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         Entity entity = this.Pl$LeashData.leashHolder;
         //保存数据
         saveLeashData(Pl$LeashData);
-        if(this instanceof ILivingEntityExtension iEntityExtension) {
-            //获取设定值
-            float leashLengthSelf = iEntityExtension.getLeashLength();
-            leashLength = leashLengthSelf > LeashCommand.MIN_VALUE ? leashLengthSelf : LeashCommand.MIN_VALUE;
-        }
+        ILivingEntityExtension iEntityExtension = (ILivingEntityExtension) this;//获取设定值
+        float leashLengthSelf = iEntityExtension.getLeashLength();
+        leashLength = leashLengthSelf > LeashCommand.MIN_VALUE ? leashLengthSelf : LeashCommand.MIN_VALUE;
         if (entity != null) {
             float breakDistanceTime = (entity instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
-            if(!isAlive() || !entity.isAlive() || distanceTo(entity) > Math.max(leashLength * breakDistanceTime, LeashCommand.MIN_VALUE * breakDistanceTime)){
-                //玩家死亡 或 持有者不存在 或 距离大于设定值的2倍（长度2倍若低于10格，则选10格） ，
+            if(!isAlive() || !entity.isAlive() ||( distanceTo(entity) > Math.max(leashLength * breakDistanceTime, LeashCommand.MIN_VALUE * breakDistanceTime) && keepLeashTick == 0)){
+                //玩家死亡 或 持有者不存在 或 距离大于设定值的 breakDistanceTime 倍且keepTick <=0（长度的 breakDistanceTime 倍若低于 LeashCommand.MIN_VALUE 格，则选 LeashCommand.MIN_VALUE 格） ，
                 // 则取消拴绳关系，并掉落拴绳
                 boolean shouldDrop = !(entity instanceof LeashRopeArrow);
                 dropLeash(true, shouldDrop);
             } else if(distanceTo(entity) > leashLength * 0.65f * breakDistanceTime && entity.onGround()) {
-                //大于1.3倍绳长则会让其跳跃（在<1.25格阻拦情况下，跳跃阻拦//TODO:待擴展
+                //大于eashLength * 0.65f * breakDistanceTime 倍绳长且在地面则会让其跳跃（在<1.25格阻拦情况下，跳跃阻拦//TODO:待擴展
                 Entity applyMovementEntity = this.isPassenger() ? this.getVehicle() : this;
                 if(applyMovementEntity instanceof LivingEntity applyMovementLivingEntity) {
                     applyMovementLivingEntity.jumpFromGround();
                 }
-
             }
+        }
+        if(keepLeashTick > 0) {//keepTick--
+            self.setKeepLeashTick(keepLeashTick - 1);
         }
     }
 
