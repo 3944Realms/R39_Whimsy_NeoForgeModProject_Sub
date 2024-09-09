@@ -63,8 +63,8 @@ public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractC
                 if (playerByUUID != null) {
                     renderLeash(pEntity, pPartialTicks, pPoseStack, pBuffer, playerByUUID);
                 } else {
-                    float breakDistanceTime = (leashDataFromEntityData.leashHolder instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
-                    float MaxLeashLength = ((ILivingEntityExtension) pEntity).getLeashLength() * breakDistanceTime;
+                    double breakDistanceTime = (leashDataFromEntityData.leashHolder instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
+                    double MaxLeashLength = ((ILivingEntityExtension) pEntity).getLeashLength() * breakDistanceTime;
                     List<Entity> entities = level.getEntities(
                     null,
                             new AABB(

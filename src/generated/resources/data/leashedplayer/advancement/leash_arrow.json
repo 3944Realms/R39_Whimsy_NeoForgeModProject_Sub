@@ -1,0 +1,35 @@
+{
+  "parent": "leashedplayer:leash_start",
+  "criteria": {
+    "has_leash_rope_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "leashedplayer:leash_rope_arrow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.leashedplayer.leashed_friend.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "leashedplayer:leash_rope_arrow"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.leash_arrow"
+    }
+  },
+  "requirements": [
+    [
+      "has_leash_rope_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -158,7 +158,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         float leashLengthSelf = iEntityExtension.getLeashLength();
         leashLength = leashLengthSelf > LeashCommand.MIN_VALUE ? leashLengthSelf : LeashCommand.MIN_VALUE;
         if (entity != null) {
-            float breakDistanceTime = (entity instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
+            double breakDistanceTime = (entity instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
             if(!isAlive() || !entity.isAlive() ||( distanceTo(entity) > Math.max(leashLength * breakDistanceTime, LeashCommand.MIN_VALUE * breakDistanceTime) && keepLeashTick == 0)){
                 //玩家死亡 或 持有者不存在 或 距离大于设定值的 breakDistanceTime 倍且keepTick <=0（长度的 breakDistanceTime 倍若低于 LeashCommand.MIN_VALUE 格，则选 LeashCommand.MIN_VALUE 格） ，
                 // 则取消拴绳关系，并掉落拴绳

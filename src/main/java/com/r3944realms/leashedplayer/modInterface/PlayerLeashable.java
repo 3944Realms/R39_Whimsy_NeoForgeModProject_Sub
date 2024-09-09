@@ -1,5 +1,6 @@
 package com.r3944realms.leashedplayer.modInterface;
 
+import com.r3944realms.leashedplayer.content.criteriaTriggers.ModCriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityLinkPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -40,6 +41,9 @@ public interface PlayerLeashable extends Leashable {
      */
     default void setLeashedTo(@NotNull Entity pLeashHolder, boolean pBroadcastPacket) {
         setLeashedTo((Entity & Leashable)this, pLeashHolder, pBroadcastPacket);
+        if(this instanceof ServerPlayer){
+            ModCriteriaTriggers.LEASH_PLAYER_TRIGGER.get().trigger((ServerPlayer) this, pLeashHolder);
+        }
     }
 
     static <E extends Entity & Leashable> void setLeashedTo(E pEntity, Entity pLeashHolder, boolean pBroadcastPacket) {

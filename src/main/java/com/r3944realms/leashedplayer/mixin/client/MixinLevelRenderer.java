@@ -93,7 +93,7 @@ public abstract class MixinLevelRenderer {
                             if (playerByUUID != null) {
                                 playerRendererExtension.renderLeashForCamera(pCamera, partialTickTime, poseStack, multibuffersource$buffersource, playerByUUID);
                             } else {
-                                float MaxLeashLength = ((ILivingEntityExtension) abstractClientPlayer).getLeashLength() * LeashedPlayer.M1() * LeashedPlayer.M2();
+                                double MaxLeashLength = ((ILivingEntityExtension) abstractClientPlayer).getLeashLength() * LeashedPlayer.M1() * LeashedPlayer.M2();
                                 List<Entity> entities = level.getEntities(
                                         null,
                                         new AABB(

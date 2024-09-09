@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "has_leash_rope_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:lead"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "leashedplayer:textures/gui/advancements/backgrounds/leashed_player.png",
+    "description": {
+      "translate": "advancement.leashedplayer.leash_start.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:lead"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.leash_start"
+    }
+  },
+  "requirements": [
+    [
+      "has_leash_rope_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
