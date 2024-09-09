@@ -1,0 +1,33 @@
+{
+  "parent": "leashedplayer:leash_arrow",
+  "criteria": {
+    "leash_by_wo_do": {
+      "conditions": {
+        "holder": {
+          "type": "minecraft:wolf"
+        }
+      },
+      "trigger": "leashedplayer:leash_player"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.leashedplayer.dog_running_player.desc"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:bone"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.dog_running_player"
+    }
+  },
+  "requirements": [
+    [
+      "leash_by_wo_do"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
