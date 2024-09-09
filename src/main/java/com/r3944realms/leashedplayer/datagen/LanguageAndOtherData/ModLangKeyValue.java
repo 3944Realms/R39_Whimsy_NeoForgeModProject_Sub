@@ -49,6 +49,20 @@ public enum ModLangKeyValue {
     TELEPORT_WITH_LEASHED_DESCRIPTION(TeleportWithLeashedPlayers.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION, "Holder will teleport with their leashed players ", "传送时将被拴玩家与持有者一起传送", "將被拴玩家將隨持有者一起傳送" ,false),
     CREATE_LEASH_FENCE_KNOT_ENTITY_IF_ABSENT_DESCRIPTION(CreateLeashFenceKnotEntityIfAbsent.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION, "Create LeashKnot Entity if it's absent on fence", "如果在栅栏处缺失拴绳结，则创建它", "如果在柵欄処缺失拴繩結，則創建它", false),
     KEEP_LEASH_NOT_DROP_TIME_DESCRIPTION(KeepLeashNotDropTime.DESCRIPTION_KEY, ModPartEnum.DESCRIPTION,"The time of Keep new leash which has far distance alive (Tick)", "当距离过远时，保持新建拴绳不掉落的时间 （刻）", "儅距離過遠時，保持其不掉落的時間（刻）", false),
+    //ADV_NAME
+    LEASH_START(ModAdvancementKey.LEASH_START.getNameKey(), ModPartEnum.NAME, "The Power of Traction", "牵引之力", "牽引之力", false),
+    LEASH_LR_ARROW(ModAdvancementKey.LEASH_ARROW.getNameKey(), ModPartEnum.NAME, "Arrow with a Tether?" , "拴绳之箭？", "拴繩之箭？", false),
+    LEASH_SELF(ModAdvancementKey.LEASHED_SELF.getNameKey(), ModPartEnum.NAME,  "Stable Connection", "稳固联结" ,"穩固聯結", false),
+    LEASH_PLAYER(ModAdvancementKey.LEASHED_FRIEND.getNameKey(),ModPartEnum.NAME, "Bond by Rope", "拴绳链接", "拴繩鏈接" , false),
+    FOLLOW_ARROW(ModAdvancementKey.FOLLOW_LEASH_ARROW.getNameKey(), ModPartEnum.NAME, "Launch!!!", "启航！！！" , "啓航！！！",false),
+    FOLLOW_WOLF(ModAdvancementKey.DOG_RUNNING_PLAYER.getNameKey(), ModPartEnum.NAME, "It's Walking human time.", "遛“人”时间", "遛“人”時間",false),
+    //ADV_DESC
+    LEASH_START_DESC(ModAdvancementKey.LEASH_START.getDescKey(), ModPartEnum.DESCRIPTION, "Journey to becoming a Leash Expert", "拴绳大师之路", "拴繩大師之路", false),
+    LEASH_LR_ARROW_DESC(ModAdvancementKey.LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Maybe you can using it to shoot some mob?", "也许可以用它来发射生物？", "也許可以用它發射生物?", false),
+    LEASH_SELF_DESC(ModAdvancementKey.LEASHED_SELF.getDescKey(), ModPartEnum.DESCRIPTION,  "“Restrain oneself with a rope", "用拴绳拴住自己" ,"用栓繩拴住自己", false),
+    LEASH_PLAYER_DESC(ModAdvancementKey.LEASHED_FRIEND.getDescKey(),ModPartEnum.DESCRIPTION, "bond player with lead", "用拴绳链接玩家", "用拴繩鏈接玩家", false),
+    FOLLOW_ARROW_DESC(ModAdvancementKey.FOLLOW_LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Mc, what are you talking about in physics?", "抱歉，我的世界不存在物理学" , "抱歉，麦块不講物理學",false),
+    FOLLOW_WOLF_DESC(ModAdvancementKey.DOG_RUNNING_PLAYER.getDescKey(), ModPartEnum.DESCRIPTION, "In the park where dogs are not allowed to be walked, the dog decided to walk the human instead", "公园不能遛狗，于是狗站起来遛人", "公園裏不許遛狗，於是狗站起來遛人",false),
     ;
     private final Supplier<?> supplier;
     private String key;

@@ -1,0 +1,33 @@
+{
+  "parent": "leashedplayer:leash_arrow",
+  "criteria": {
+    "leash_arrow": {
+      "conditions": {
+        "holder": {
+          "type": "leashedplayer:leash_rope_arrow"
+        }
+      },
+      "trigger": "leashedplayer:leash_player"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.leashedplayer.follow_arrow.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "leashedplayer:leash_rope_arrow"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.follow_arrow"
+    }
+  },
+  "requirements": [
+    [
+      "leash_arrow"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "leashedplayer:leash_start",
+  "criteria": {
+    "leash_self": {
+      "conditions": {
+        "holder": {
+          "type": "minecraft:leash_knot"
+        }
+      },
+      "trigger": "leashedplayer:leash_player"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.leashedplayer.leashed_self.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:player_head"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.leashed_self"
+    }
+  },
+  "requirements": [
+    [
+      "leash_self"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

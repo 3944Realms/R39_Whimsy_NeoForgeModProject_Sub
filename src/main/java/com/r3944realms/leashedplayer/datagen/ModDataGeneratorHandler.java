@@ -16,19 +16,21 @@ import java.util.concurrent.CompletableFuture;
 public class ModDataGeneratorHandler {
     @SubscribeEvent
     public static void genData(GatherDataEvent event) {
-        CompletableFuture<HolderLookup.Provider> HolderFolder = event.getLookupProvider();
+        CompletableFuture<HolderLookup.Provider> holderFolder = event.getLookupProvider();
 
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         /*Language Provider ENGLISH CHINESE(SIM/TRA)*/
-        addLanguage(event, LanguageEnum.English, "en_us");
-        addLanguage(event, LanguageEnum.SimpleChinese, "zh_cn");
-        addLanguage(event, LanguageEnum.TraditionalChinese, "zh_tw");
-        addLanguage(event, LanguageEnum.LiteraryChinese, "lzh");
+        addLanguage(event, LanguageEnum.English);
+        addLanguage(event, LanguageEnum.SimpleChinese);
+        addLanguage(event, LanguageEnum.TraditionalChinese);
+        addLanguage(event, LanguageEnum.LiteraryChinese);
+        ModDataPackBuiltInEntriesProvider(event, holderFolder);
         ItemModelGenerator(event, existingFileHelper);
-        RecipeGenerator(event, HolderFolder);
+        RecipeGenerator(event, holderFolder);
         ModTagsProvider(event, event.getLookupProvider(), existingFileHelper);
+        ModAdvancementProvider(event, holderFolder, existingFileHelper);
     }
-    private static void addLanguage(GatherDataEvent event, LanguageEnum language, String lan_regex){
+    private static void addLanguage(GatherDataEvent event, LanguageEnum language){
         event.getGenerator().addProvider(
                 event.includeClient(),
                 (DataProvider.Factory<ModLanguageProvider>) pOutput -> new ModLanguageProvider(pOutput, LeashedPlayer.MOD_ID, language)
@@ -58,4 +60,16 @@ public class ModDataGeneratorHandler {
                         new ModItemTagProvider(pOutput, completableFuture, modBlockTagProvider.contentsGetter(), helper)
         );
     }
+
+    private static void ModDataPackBuiltInEntriesProvider(GatherDataEvent event, CompletableFuture<HolderLookup.Provider> future) {
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                (DataProvider.Factory<ModDataPackBuiltInEntriesProvider>) pOutput -> new ModDataPackBuiltInEntriesProvider(pOutput, future)
+        );
+    }private static void ModAdvancementProvider(GatherDataEvent event, CompletableFuture<HolderLookup.Provider> pLookUpProvider, ExistingFileHelper helper) {
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                (DataProvider.Factory<ModAdvancementProvider>) pOutput -> new ModAdvancementProvider(pOutput, pLookUpProvider, helper));
+    }
+
 }

@@ -1,0 +1,32 @@
+{
+  "parent": "leashedplayer:leash_start",
+  "criteria": {
+    "leash_other_player": {
+      "conditions": {
+        "holder": {
+          "type": "minecraft:player"
+        }
+      },
+      "trigger": "leashedplayer:leash_player"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.leashedplayer.leashed_friend.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:lead"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.leashed_friend"
+    }
+  },
+  "requirements": [
+    [
+      "leash_other_player"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
