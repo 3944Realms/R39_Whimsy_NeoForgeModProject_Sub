@@ -22,6 +22,7 @@ import static com.r3944realms.leashedplayer.content.items.ModCreativeTab.LEASHED
 public enum ModLangKeyValue {
     //ITEM
     ITEM_LEASH_ROPE_ARROW(ModItemRegister.LEASH_ROPE_ARROW, ModPartEnum.ITEM, "Leash Rope Arrow", "拴绳箭", "拴繩箭", true),
+    TEST_FABRIC_ITEM(ModItemRegister.FABRIC, ModPartEnum.ITEM, "Fabric", "Fabric", "Fabric", true),
     //ITEM_DESC
     DESC_ITEM_LEASH_ROPE_ARROW(LeashRopeArrowItem.descKey, ModPartEnum.DESCRIPTION, "Arrows with ropes attached?","带有拴绳的箭矢？", "帶有拴繩的箭矢？", false),
     //ENTITY

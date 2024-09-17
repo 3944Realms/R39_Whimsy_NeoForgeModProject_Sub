@@ -36,4 +36,5 @@ public class ClientEventHandler {
     public static void RegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntityRegister.LEASH_ROPE_ARROW.get(), LeashRopeArrowRenderer::new);
     }
+
 }

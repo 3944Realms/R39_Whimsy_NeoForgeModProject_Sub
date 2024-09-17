@@ -2,7 +2,6 @@
   "package": "com.r3944realms.leashedplayer.mixin",
   "mixins": [
     "both.MixinEntity",
-    "both.MixinLivingEntity",
     "both.MixinPlayer",
     "item.MixinLeadItem",
     "server.MixinServerGamePacketListenerImpl"

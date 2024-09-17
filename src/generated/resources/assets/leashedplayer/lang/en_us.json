@@ -20,6 +20,7 @@
   "gamerule.LP.TeleportWithLeashedPlayers": "Teleport leashed player with player holder",
   "gamerule.LP.TeleportWithLeashedPlayers.description": "Holder will teleport with their leashed players ",
   "item.leash_rope_arrow.description": "Arrows with ropes attached?",
+  "item.leashedplayer.fabric": "Fabric",
   "item.leashedplayer.leash_rope_arrow": "Leash Rope Arrow",
   "leashedplayer.command.leash.message.leash.data.clear": "%1$s's LeashData(LeashHolderEntity: %2$s) now is clear",
   "leashedplayer.command.leash.message.leash.data.clear.leash.clear.failed.no_data": "%1$s has no LeashData can be clear",

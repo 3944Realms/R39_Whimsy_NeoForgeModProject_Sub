@@ -20,6 +20,7 @@
   "gamerule.LP.TeleportWithLeashedPlayers": "被拴玩家随玩家持有者传送",
   "gamerule.LP.TeleportWithLeashedPlayers.description": "传送时将被拴玩家与持有者一起传送",
   "item.leash_rope_arrow.description": "带有拴绳的箭矢？",
+  "item.leashedplayer.fabric": "Fabric",
   "item.leashedplayer.leash_rope_arrow": "拴绳箭",
   "leashedplayer.command.leash.message.leash.data.clear": "%1$s的拴绳数据（拴绳持有者实体：%2$s）现在已清除",
   "leashedplayer.command.leash.message.leash.data.clear.leash.clear.failed.no_data": "%1$s沒有拴绳数据可清除",
