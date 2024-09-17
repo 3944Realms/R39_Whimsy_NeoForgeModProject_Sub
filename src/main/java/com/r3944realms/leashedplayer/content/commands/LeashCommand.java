@@ -132,10 +132,11 @@ public class LeashCommand {
             CommandSourceStack source = context.getSource();
             float leashLength = context.getArgument("leashLength", Float.class);
             try {
-                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayer");
+                Collection<ServerPlayer> playerCol = EntityArgument.getPlayers(context, "targetPlayers");
                 playerCol.forEach(player -> {
                     try {
                         ((ILivingEntityExtension)player).setLeashLength(leashLength);
+                        source.sendSuccess(() -> Component.translatable(LEASH_LENGTH_SET, player.getDisplayName(), leashLength), true);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

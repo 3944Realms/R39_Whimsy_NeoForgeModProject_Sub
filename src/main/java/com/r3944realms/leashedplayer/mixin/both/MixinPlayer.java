@@ -28,15 +28,45 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer extends LivingEntity implements PlayerLeashable {
+public abstract class MixinPlayer extends LivingEntity implements PlayerLeashable, ILivingEntityExtension {
+
+    @Unique
+    protected int Pl$LeashKeepTick;//保存状态，当超过断裂绳长时若LeashKeepTick大于0，则不断裂
+
     @Unique
     @Nullable
     private LeashData Pl$LeashData;//Data
 
-
     @SuppressWarnings("WrongEntityDataParameterClass")
     @Unique//客户端与服务器端的实体同步数据
     private static final EntityDataAccessor<CompoundTag> Pl$LEASH_DATA = SynchedEntityData.defineId(Player.class, EntityDataSerializers.COMPOUND_TAG);
+
+    @Unique
+    @SuppressWarnings("WrongEntityDataParameterClass")
+    private static final EntityDataAccessor<Float> DATA_ENTITY_LEASH_LENGTH = SynchedEntityData.defineId(Player.class, EntityDataSerializers.FLOAT);
+
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public float getLeashLength() {
+        return this.entityData.get(DATA_ENTITY_LEASH_LENGTH);
+    }
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public void setLeashLength(float length) {
+        this.entityData.set(DATA_ENTITY_LEASH_LENGTH, length);
+    }
+
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public void setKeepLeashTick(int keepTick) {
+        this.Pl$LeashKeepTick = Math.max(keepTick, 0);
+    }
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public int getKeepLeashTick() {
+        return this.Pl$LeashKeepTick;
+    }
+
 
     protected MixinPlayer(EntityType<? extends LivingEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -256,6 +286,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         CompoundTag leashCompoundTag = new CompoundTag();
         this.writeLeashData(leashCompoundTag, null);
         pBuilder.define(Pl$LEASH_DATA, leashCompoundTag);
+        pBuilder.define(DATA_ENTITY_LEASH_LENGTH, 5.0F);
     }
     @Inject(
             method = {"addAdditionalSaveData"}, at = {@At("RETURN")}
@@ -265,6 +296,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         writeLeashData(pLeashTag, Pl$LeashData);
         pCompound.put("Pl$LeashData", pLeashTag);
         this.entityData.set(Pl$LEASH_DATA, pLeashTag);
+        pCompound.putFloat("LeashLength", getLeashLength());
     }
     @Inject(
             method = {"readAdditionalSaveData"}, at = {@At("RETURN")}
@@ -274,6 +306,9 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
             CompoundTag pl$LeashData = pCompound.getCompound("Pl$LeashData");
             this.entityData.set(Pl$LEASH_DATA, pl$LeashData);
             Pl$LeashData = readLeashData(pl$LeashData);
+        }
+        if(pCompound.contains("LeashLength")) {
+            this.setLeashLength(pCompound.getFloat("LeashLength"));
         }
     }
 

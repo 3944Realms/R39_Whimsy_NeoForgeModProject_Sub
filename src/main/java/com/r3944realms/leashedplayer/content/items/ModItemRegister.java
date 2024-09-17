@@ -17,6 +17,11 @@ public class ModItemRegister {
     public static final Supplier<Item> LEASH_ROPE_ARROW = ModItemRegister.register("leash_rope_arrow",
             () -> new LeashRopeArrowItem(new Item.Properties().stacksTo(16))
     );
+
+    public static final Supplier<Item> FABRIC = ModItemRegister.register("fabric",
+            () -> new TestItem(new Item.Properties().stacksTo(1))
+    );
+
     public static Supplier<Item> register(String name, Supplier<Item> supplier) {
         return register(name, supplier, true);
     }
