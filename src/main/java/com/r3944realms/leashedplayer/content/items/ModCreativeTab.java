@@ -18,12 +18,12 @@ public class ModCreativeTab {
     public static final String LEASHED_PLAYER_TAB_STRING = "creativetab." + LeashedPlayer.MOD_ID;
     public static final String LEASHED_PLAYER_ITEM = "leashedplayer_tab";
     public static final Supplier<CreativeModeTab> TEST_TAB = CREATIVE_MODE_TABS.register(LEASHED_PLAYER_ITEM,() -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.COMBAT)
             .title(Component.translatable(getCreativeMod(LEASHED_PLAYER_ITEM)))
             .icon(() -> ModItemRegister.LEASH_ROPE_ARROW.get().getDefaultInstance())
             .displayItems(((pParameters, pOutput) -> {
                 pOutput.accept(Items.LEAD);
                 pOutput.accept(ModItemRegister.LEASH_ROPE_ARROW.get());
+                pOutput.accept(ModItemRegister.FABRIC.get());
             })).build());
     public static String getCreativeMod(@NotNull String tabs) {
         return LEASHED_PLAYER_TAB_STRING + "." + tabs;
