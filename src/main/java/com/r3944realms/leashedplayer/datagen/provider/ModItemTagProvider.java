@@ -21,6 +21,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider pProvider) {
         this.tag(ItemTags.ARROWS)
-                .add(ModItemRegister.LEASH_ROPE_ARROW.get());
+                .add(ModItemRegister.LEASH_ROPE_ARROW.get())
+                .add(ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get());
     }
 }

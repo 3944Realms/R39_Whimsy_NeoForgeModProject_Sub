@@ -41,7 +41,7 @@ public interface PlayerLeashable extends Leashable {
      */
     default void setLeashedTo(@NotNull Entity pLeashHolder, boolean pBroadcastPacket) {
         setLeashedTo((Entity & Leashable)this, pLeashHolder, pBroadcastPacket);
-        if(this instanceof ServerPlayer){
+        if(this instanceof ServerPlayer) {
             ModCriteriaTriggers.LEASH_PLAYER_TRIGGER.get().trigger((ServerPlayer) this, pLeashHolder);
         }
     }

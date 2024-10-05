@@ -5,7 +5,7 @@ import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.gamerules.Server.CreateLeashFenceKnotEntityIfAbsent;
 import com.r3944realms.leashedplayer.content.gamerules.Server.KeepLeashNotDropTime;
 import com.r3944realms.leashedplayer.content.gamerules.Server.TeleportWithLeashedPlayers;
-import com.r3944realms.leashedplayer.content.items.LeashRopeArrowItem;
+import com.r3944realms.leashedplayer.content.items.type.LeashRopeArrowItem;
 import com.r3944realms.leashedplayer.content.items.ModCreativeTab;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
 import com.r3944realms.leashedplayer.utils.Enum.LanguageEnum;
@@ -22,11 +22,13 @@ import static com.r3944realms.leashedplayer.content.items.ModCreativeTab.LEASHED
 public enum ModLangKeyValue {
     //ITEM
     ITEM_LEASH_ROPE_ARROW(ModItemRegister.LEASH_ROPE_ARROW, ModPartEnum.ITEM, "Leash Rope Arrow", "拴绳箭", "拴繩箭", true),
+    ITEM_SPECTRAL_LEASH_ROPE_ARROW(ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW, ModPartEnum.ITEM, "Spectral Leash Rope Arrow", "拴绳光灵箭", "拴繩光靈箭", true),
     TEST_FABRIC_ITEM(ModItemRegister.FABRIC, ModPartEnum.ITEM, "Fabric", "Fabric", "Fabric", true),
     //ITEM_DESC
     DESC_ITEM_LEASH_ROPE_ARROW(LeashRopeArrowItem.descKey, ModPartEnum.DESCRIPTION, "Arrows with ropes attached?","带有拴绳的箭矢？", "帶有拴繩的箭矢？", false),
     //ENTITY
     LEASH_ROPE_ARROW(ModEntityRegister.getEntityNameKey("leash_rope_arrow"), ModPartEnum.ENTITY, "Leash Rope Arrow", "拴绳箭", "拴繩箭", false),
+    SPECTRAL_LEASH_ROPE_ARROW(ModEntityRegister.getEntityNameKey("spectral_leash_rope_arrow"), ModPartEnum.ENTITY, "Spectral Leash Rope Arrow", "拴绳光灵箭", "拴繩光靈箭", false),
     //CREATIVE_TAB
     CREATIVE_TAB_NAME(ModCreativeTab.getCreativeMod(LEASHED_PLAYER_ITEM), ModPartEnum.CREATIVE_TAB, "Leashed Player","可拴玩家", "可拴玩家", false),
     //COMMAND_MESSAGE
@@ -53,15 +55,17 @@ public enum ModLangKeyValue {
     //ADV_NAME
     LEASH_START(ModAdvancementKey.LEASH_START.getNameKey(), ModPartEnum.NAME, "The Power of Traction", "牵引之力", "牽引之力", false),
     LEASH_LR_ARROW(ModAdvancementKey.LEASH_ARROW.getNameKey(), ModPartEnum.NAME, "Arrow with a Tether?" , "拴绳之箭？", "拴繩之箭？", false),
+    LEASH_SLP_ARROW(ModAdvancementKey.ADVANCEMENT_LEASH_ARROW.getNameKey(), ModPartEnum.NAME, "More advanced flash arrow with a Tether?", "更闪亮的拴绳箭？", "更閃亮的拴繩箭？", false),
     LEASH_SELF(ModAdvancementKey.LEASHED_SELF.getNameKey(), ModPartEnum.NAME,  "Stable Connection", "稳固联结" ,"穩固聯結", false),
-    LEASH_PLAYER(ModAdvancementKey.LEASHED_FRIEND.getNameKey(),ModPartEnum.NAME, "Bond by Rope", "拴绳链接", "拴繩鏈接" , false),
+    LEASH_PLAYER(ModAdvancementKey.LEASHED_FRIEND.getNameKey(),ModPartEnum.NAME, "Be bound by Rope", "拴绳链接", "拴繩鏈接" , false),
     FOLLOW_ARROW(ModAdvancementKey.FOLLOW_LEASH_ARROW.getNameKey(), ModPartEnum.NAME, "Launch!!!", "启航！！！" , "啓航！！！",false),
     FOLLOW_WOLF(ModAdvancementKey.DOG_RUNNING_PLAYER.getNameKey(), ModPartEnum.NAME, "It's Walking human time.", "遛“人”时间", "遛“人”時間",false),
     //ADV_DESC
     LEASH_START_DESC(ModAdvancementKey.LEASH_START.getDescKey(), ModPartEnum.DESCRIPTION, "Journey to becoming a Leash Expert", "拴绳大师之路", "拴繩大師之路", false),
     LEASH_LR_ARROW_DESC(ModAdvancementKey.LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Maybe you can using it to shoot some mob?", "也许可以用它来发射生物？", "也許可以用它發射生物?", false),
+    LEASH_SLP_ARROW_DESC(ModAdvancementKey.ADVANCEMENT_LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Well, apart from glowing, there doesn't seem to be any other difference", "嗯，除了发光，似乎没有什么其它不同了" ,"嗯，除了發光，其它好像沒什麽不同", false),
     LEASH_SELF_DESC(ModAdvancementKey.LEASHED_SELF.getDescKey(), ModPartEnum.DESCRIPTION,  "“Restrain oneself with a rope", "用拴绳拴住自己" ,"用栓繩拴住自己", false),
-    LEASH_PLAYER_DESC(ModAdvancementKey.LEASHED_FRIEND.getDescKey(),ModPartEnum.DESCRIPTION, "bond player with lead", "用拴绳链接玩家", "用拴繩鏈接玩家", false),
+    LEASH_PLAYER_DESC(ModAdvancementKey.LEASHED_FRIEND.getDescKey(),ModPartEnum.DESCRIPTION, "Be Bond by player with lead", "被玩家用拴绳链接", "被玩家用拴繩鏈接", false),
     FOLLOW_ARROW_DESC(ModAdvancementKey.FOLLOW_LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Mc, what are you talking about in physics?", "抱歉，我的世界不存在物理学" , "抱歉，麦块不講物理學",false),
     FOLLOW_WOLF_DESC(ModAdvancementKey.DOG_RUNNING_PLAYER.getDescKey(), ModPartEnum.DESCRIPTION, "In the park where dogs are not allowed to be walked, the dog decided to walk the human instead", "公园不能遛狗，于是狗站起来遛人", "公園裏不許遛狗，於是狗站起來遛人",false),
     ;

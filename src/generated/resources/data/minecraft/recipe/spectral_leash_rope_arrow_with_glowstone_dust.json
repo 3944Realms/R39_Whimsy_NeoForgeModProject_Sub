@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "leashedplayer:leash_rope_arrow"
+    },
+    "$": {
+      "item": "minecraft:glowstone_dust"
+    }
+  },
+  "pattern": [
+    " $ ",
+    "$#$",
+    " $ "
+  ],
+  "result": {
+    "count": 1,
+    "id": "leashedplayer:spectral_leash_rope_arrow"
+  }
+}

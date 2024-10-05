@@ -1,7 +1,8 @@
-// 1.21.1	2024-09-11T16:30:11.5982305	Item Models: leashedplayer
+// 1.21.1	2024-10-05T22:32:01.8406652	Item Models: leashedplayer
 5846df9d85726428905701120ef34c9324c20faf assets/leashedplayer/models/item/bow_lra_pulling_0.json
 845a7316b86e26f88c6932d4ef2656126503727a assets/leashedplayer/models/item/bow_lra_pulling_1.json
 5bd1f9f28b91005c587f1c38fb77cd19b59495e3 assets/leashedplayer/models/item/bow_lra_pulling_2.json
 83946f4d60d0fb1758d6553c36330506c8e48ada assets/leashedplayer/models/item/crossbow_leash_rope_arrow.json
 bb0d76077719c83c8a8bd4346a24ea1766175125 assets/leashedplayer/models/item/fabric.json
 114d3cc5832ef047403114504483c6f3ea07e77c assets/leashedplayer/models/item/leash_rope_arrow.json
+c4748995a5fe190d20e3bd16f4b2244164ec0f83 assets/leashedplayer/models/item/spectral_leash_rope_arrow.json

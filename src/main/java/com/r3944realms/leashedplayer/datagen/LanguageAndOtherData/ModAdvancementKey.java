@@ -11,6 +11,7 @@ public enum ModAdvancementKey {
     LEASHED_FRIEND("leashed_friend", LEASH_START),
     LEASHED_SELF("leashed_self", LEASH_START),
     LEASH_ARROW("leash_arrow", LEASH_START),
+    ADVANCEMENT_LEASH_ARROW("advancement_leash_arrow", LEASH_ARROW),
     FOLLOW_LEASH_ARROW("follow_arrow", LEASH_ARROW),
     DOG_RUNNING_PLAYER("dog_running_player", LEASH_ARROW),
     ;
