@@ -42,7 +42,7 @@ public class ModAdvancementGenerator implements AdvancementProvider.AdvancementG
         AdvancementHolder hasLeashRopeArrow = Advancement.Builder.advancement().display(
                         ModItemRegister.LEASH_ROPE_ARROW.get(),
                         Component.translatable(ModAdvancementKey.LEASH_ARROW.getNameKey()),
-                        Component.translatable(ModAdvancementKey.LEASHED_FRIEND.getDescKey()),
+                        Component.translatable(ModAdvancementKey.LEASH_ARROW.getDescKey()),
                         null,
                         AdvancementType.TASK,
                         true,
