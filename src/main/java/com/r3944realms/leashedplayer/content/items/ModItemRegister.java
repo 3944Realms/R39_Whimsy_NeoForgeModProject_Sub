@@ -1,8 +1,12 @@
 package com.r3944realms.leashedplayer.content.items;
 
 import com.r3944realms.leashedplayer.LeashedPlayer;
+import com.r3944realms.leashedplayer.content.items.type.LeashRopeArrowItem;
+import com.r3944realms.leashedplayer.content.items.type.SpectralLeashRopeArrowItem;
+import com.r3944realms.leashedplayer.content.items.type.TestItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpectralArrowItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -17,6 +21,8 @@ public class ModItemRegister {
     public static final Supplier<Item> LEASH_ROPE_ARROW = ModItemRegister.register("leash_rope_arrow",
             () -> new LeashRopeArrowItem(new Item.Properties().stacksTo(16))
     );
+    public static final Supplier<Item> SPECTRAL_LEASH_ROPE_ARROW = ModItemRegister.register("spectral_leash_rope_arrow",
+            () -> new SpectralLeashRopeArrowItem(new Item.Properties().stacksTo(16)));
 
     public static final Supplier<Item> FABRIC = ModItemRegister.register("fabric",
             () -> new TestItem(new Item.Properties().stacksTo(1))

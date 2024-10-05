@@ -52,6 +52,19 @@ public class ModAdvancementGenerator implements AdvancementProvider.AdvancementG
                 .parent(hasLeashRopeItem)
                 .save(saver, ModAdvancementKey.LEASH_ARROW.getNameWithNameSpace());
 
+        AdvancementHolder hasFlashLeashRopeArrow = Advancement.Builder.advancement().display(
+                        ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get(),
+                        Component.translatable(ModAdvancementKey.ADVANCEMENT_LEASH_ARROW.getNameKey()),
+                        Component.translatable(ModAdvancementKey.ADVANCEMENT_LEASH_ARROW.getDescKey()),
+                        null,
+                        AdvancementType.TASK,
+                        true,
+                        false,
+                        true
+                ).addCriterion("has_flash_leash_rope_item", InventoryChangeTrigger.TriggerInstance.hasItems(ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get()))
+                .parent(hasLeashRopeArrow)
+                .save(saver, ModAdvancementKey.ADVANCEMENT_LEASH_ARROW.getNameWithNameSpace());
+
         AdvancementHolder leashedMySelf = Advancement.Builder.advancement().display(
                 Items.PLAYER_HEAD,
                 Component.translatable(ModAdvancementKey.LEASHED_SELF.getNameKey()),

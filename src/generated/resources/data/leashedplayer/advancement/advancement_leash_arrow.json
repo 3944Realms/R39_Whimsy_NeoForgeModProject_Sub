@@ -1,0 +1,35 @@
+{
+  "parent": "leashedplayer:leash_arrow",
+  "criteria": {
+    "has_flash_leash_rope_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": "leashedplayer:spectral_leash_rope_arrow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.leashedplayer.advancement_leash_arrow.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "leashedplayer:spectral_leash_rope_arrow"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.advancement_leash_arrow"
+    }
+  },
+  "requirements": [
+    [
+      "has_flash_leash_rope_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

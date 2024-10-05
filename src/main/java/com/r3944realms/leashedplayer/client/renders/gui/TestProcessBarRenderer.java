@@ -1,4 +1,4 @@
-package com.r3944realms.leashedplayer.client.renders;
+package com.r3944realms.leashedplayer.client.renders.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.r3944realms.leashedplayer.client.processBar.IProcessBar;

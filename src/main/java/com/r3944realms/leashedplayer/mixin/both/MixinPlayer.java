@@ -5,6 +5,7 @@ import com.r3944realms.leashedplayer.content.commands.LeashCommand;
 import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
+import com.r3944realms.leashedplayer.utils.Logger;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -25,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Mixin(Player.class)
@@ -82,6 +85,17 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         if(leashHolder != null ) {
             //存在则更新
             Pl$UpdateLeash(leashHolder, (Entity) playerLeashable);
+            try {
+                Objects.requireNonNull(this.getAttribute(Attributes.STEP_HEIGHT)).setBaseValue(1.25f);
+            } catch (Exception e) {
+                Logger.logger.error(e.getMessage());
+            }
+        } else {
+            try {
+                Objects.requireNonNull(this.getAttribute(Attributes.STEP_HEIGHT)).setBaseValue(0.6f);
+            } catch (Exception e) {
+                Logger.logger.error(e.getMessage());
+            }
         }
     }
     @Unique

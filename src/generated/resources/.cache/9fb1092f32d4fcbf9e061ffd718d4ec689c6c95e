@@ -1,3 +1,7 @@
-// 1.21.1	2024-09-05T13:20:35.9705404	Recipes
+// 1.21.1	2024-10-05T22:33:13.2484086	Recipes
 1b45d1ad8dc73f1787c97777ad13d9771c9e0ad1 data/leashedplayer/advancement/recipes/misc/leash_rope_arrow.json
 974d74538b3e172946f2e169036b453b6eb6bc0a data/leashedplayer/recipe/leash_rope_arrow.json
+c0e05f359296d3e28573fa1b205ac44736376622 data/minecraft/advancement/recipes/misc/spectral_leash_rope_arrow_with_glowstone_dust.json
+131fcbef603bfde7204d8e1ad15e4544696926bf data/minecraft/advancement/recipes/misc/spectral_leash_rope_arrow_with_leash_rope_arrow.json
+bb5909aa91d878c8f0ef9999881cfe89532509dd data/minecraft/recipe/spectral_leash_rope_arrow_with_glowstone_dust.json
+a1381da885fbedec01243c78afbb0a50ca803ee4 data/minecraft/recipe/spectral_leash_rope_arrow_with_leash_rope_arrow.json

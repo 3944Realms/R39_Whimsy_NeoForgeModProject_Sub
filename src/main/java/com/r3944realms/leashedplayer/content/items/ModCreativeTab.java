@@ -4,7 +4,6 @@ import com.r3944realms.leashedplayer.LeashedPlayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -23,7 +22,7 @@ public class ModCreativeTab {
             .displayItems(((pParameters, pOutput) -> {
                 pOutput.accept(Items.LEAD);
                 pOutput.accept(ModItemRegister.LEASH_ROPE_ARROW.get());
-                pOutput.accept(ModItemRegister.FABRIC.get());
+                pOutput.accept(ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get());
             })).build());
     public static String getCreativeMod(@NotNull String tabs) {
         return LEASHED_PLAYER_TAB_STRING + "." + tabs;

@@ -1,9 +1,11 @@
 package com.r3944realms.leashedplayer;
 
-import com.r3944realms.leashedplayer.client.renders.LeashRopeArrowRenderer;
+import com.r3944realms.leashedplayer.client.renders.entities.LeashRopeArrowRenderer;
+import com.r3944realms.leashedplayer.client.renders.entities.SpectralLeashRopeArrowRenderer;
 import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
+import com.r3944realms.leashedplayer.content.items.type.ILeashRopeArrow;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -23,11 +25,11 @@ public class ClientEventHandler {
             ItemProperties.register(Items.CROSSBOW, ResourceLocation.withDefaultNamespace("leash_rope_arrow"),
                     ((pStack, pLevel, pEntity, pSeed) -> {
                         ChargedProjectiles chargedProjectiles = pStack.get(DataComponents.CHARGED_PROJECTILES);
-                        return chargedProjectiles != null && chargedProjectiles.contains(ModItemRegister.LEASH_ROPE_ARROW.get()) ? 1.0F : 0.0F;
+                        return chargedProjectiles != null && (chargedProjectiles.contains(ModItemRegister.LEASH_ROPE_ARROW.get()) || chargedProjectiles.contains(ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get())) ? 1.0F : 0.0F;
                     }));
             ItemProperties.register(Items.BOW, ResourceLocation.withDefaultNamespace("leash_rope_arrow_pulling"),
                     ((pStack, pLevel, pEntity, pSeed) ->
-                        (pEntity != null && pEntity.isUsingItem() && pEntity.getUseItem() == pStack && LeashRopeArrow.isLeashRopeArrow(pStack, pEntity)) ? 1.0F: 0.0F
+                        (pEntity != null && pEntity.isUsingItem() && pEntity.getUseItem() == pStack && ILeashRopeArrow.isLeashRopeArrow(pStack, pEntity)) ? 1.0F: 0.0F
             ));
         });
 
@@ -35,6 +37,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void RegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntityRegister.LEASH_ROPE_ARROW.get(), LeashRopeArrowRenderer::new);
+        event.registerEntityRenderer(ModEntityRegister.SPECTRAL_LEASH_ROPE_ARROW.get(), SpectralLeashRopeArrowRenderer::new);
     }
 
 }

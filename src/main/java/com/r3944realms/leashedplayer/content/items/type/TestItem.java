@@ -1,11 +1,11 @@
-package com.r3944realms.leashedplayer.content.items;
+package com.r3944realms.leashedplayer.content.items.type;
 
 import com.r3944realms.leashedplayer.client.processBar.IProcessBar;
 import com.r3944realms.leashedplayer.client.processBar.TestProcessBar;
-import com.r3944realms.leashedplayer.client.renders.AdaptiveGuiRendererHandler;
-import com.r3944realms.leashedplayer.client.renders.IFadingProcessBarRenderer;
-import com.r3944realms.leashedplayer.client.renders.IProcessBarRenderer;
-import com.r3944realms.leashedplayer.client.renders.TestProcessBarRenderer;
+import com.r3944realms.leashedplayer.client.renders.gui.AdaptiveGuiRendererHandler;
+import com.r3944realms.leashedplayer.client.renders.gui.IFadingProcessBarRenderer;
+import com.r3944realms.leashedplayer.client.renders.gui.IProcessBarRenderer;
+import com.r3944realms.leashedplayer.client.renders.gui.TestProcessBarRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;

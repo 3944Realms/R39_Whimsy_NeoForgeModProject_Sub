@@ -1,4 +1,4 @@
-package com.r3944realms.leashedplayer.client.renders;
+package com.r3944realms.leashedplayer.client.renders.entities;
 
 import com.r3944realms.leashedplayer.LeashedPlayer;
 import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
