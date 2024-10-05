@@ -1,5 +1,6 @@
 package com.r3944realms.leashedplayer.content.entities;
 
+import com.r3944realms.leashedplayer.content.items.ModItemRegister;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,4 +60,12 @@ public class SpectralLeashRopeArrow extends LeashRopeArrow {
         pCompound.putInt("Duration", this.duration);
     }
 
+    @Override
+    protected ItemStack getOrginalItemStack() {
+        return Items.SPECTRAL_ARROW.getDefaultInstance();
+    }
+    @Override
+    protected ItemStack getSelfItemStack() {
+        return ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get().getDefaultInstance();
+    }
 }
