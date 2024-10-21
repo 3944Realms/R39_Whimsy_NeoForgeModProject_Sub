@@ -25,6 +25,7 @@ public class ModDataGeneratorHandler {
         addLanguage(event, LanguageEnum.TraditionalChinese);
         addLanguage(event, LanguageEnum.LiteraryChinese);
         ModDataPackBuiltInEntriesProvider(event, holderFolder);
+        ModPaintVariantTagsProvider(event, holderFolder, existingFileHelper);
         ItemModelGenerator(event, existingFileHelper);
         RecipeGenerator(event, holderFolder);
         ModTagsProvider(event, event.getLookupProvider(), existingFileHelper);
@@ -66,10 +67,19 @@ public class ModDataGeneratorHandler {
                 event.includeServer(),
                 (DataProvider.Factory<ModDataPackBuiltInEntriesProvider>) pOutput -> new ModDataPackBuiltInEntriesProvider(pOutput, future)
         );
-    }private static void ModAdvancementProvider(GatherDataEvent event, CompletableFuture<HolderLookup.Provider> pLookUpProvider, ExistingFileHelper helper) {
+    }
+    private static void ModAdvancementProvider(GatherDataEvent event, CompletableFuture<HolderLookup.Provider> pLookUpProvider, ExistingFileHelper helper) {
         event.getGenerator().addProvider(
                 event.includeServer(),
                 (DataProvider.Factory<ModAdvancementProvider>) pOutput -> new ModAdvancementProvider(pOutput, pLookUpProvider, helper));
+    }
+    private static void ModPaintVariantTagsProvider(GatherDataEvent event, CompletableFuture<HolderLookup.Provider> completableFuture, ExistingFileHelper helper) {
+        event.getGenerator().addProvider(
+                event.includeServer(),
+                (DataProvider.Factory<ModPaintingVariantTagsProvider>) pOutput -> {
+                    return new ModPaintingVariantTagsProvider(pOutput, completableFuture, LeashedPlayer.MOD_ID, helper);
+                }
+        );
     }
 
 }

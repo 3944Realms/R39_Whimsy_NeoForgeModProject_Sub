@@ -5,6 +5,7 @@ import com.r3944realms.leashedplayer.content.criteriaTriggers.ModCriteriaTrigger
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.items.ModCreativeTab;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
+import com.r3944realms.leashedplayer.content.paintings.paintings.ModPaintingsRegister;
 import com.r3944realms.leashedplayer.utils.Util;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -19,6 +20,7 @@ public class LeashedPlayer {
     private static Double M2;//繩箭拴繩掉落距離倍基數
     public LeashedPlayer(IEventBus event) {
         ModItemRegister.register(event);
+        ModPaintingsRegister.register(event);
         ModEntityRegister.register(event);
         ModCreativeTab.register(event);
         ModCriteriaTriggers.register(event);

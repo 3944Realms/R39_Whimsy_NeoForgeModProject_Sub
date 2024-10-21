@@ -37,5 +37,10 @@
   "leashedplayer.command.leash.message.leash.data.show": "%1$s's LeashDataEntity is %2$s",
   "leashedplayer.command.leash.message.leash.length.failed": "Failed (Internal Error, maybe your command is incorrect)",
   "leashedplayer.command.leash.message.leash.length.set": "The Leash length of %1$s is set to %2$s blocks",
-  "leashedplayer.command.leash.message.leash.length.show": "The Leash Length of %1$s is %2$s blocks"
+  "leashedplayer.command.leash.message.leash.length.show": "The Leash Length of %1$s is %2$s blocks",
+  "leashedplayer.command.motion.message.adder.successful": "§bAdd Successfully.§a%s§7:§f[§eVec§7: §a(§f%f§7,§f%f§7,§f%f§a)§f]§r",
+  "leashedplayer.command.motion.message.multiply.successful": "§bMultiply Successfully.§a%s§7:§f[§eVec§7: §a(§f%f§7,§f%f§7,§f%f§a)§f]§r",
+  "leashedplayer.command.motion.message.setter.successful": "§bSet Successfully.§a%s§7:§f[§eVec§7: §a(§f%f§7,§f%f§7,§f%f§a)§f]§r",
+  "painting.leashedplayer.group_photo.author": "§9Leisure §4Time §eDock§r",
+  "painting.leashedplayer.group_photo.title": "§dGroup Photo §7[§6memorable§7]§r"
 }
