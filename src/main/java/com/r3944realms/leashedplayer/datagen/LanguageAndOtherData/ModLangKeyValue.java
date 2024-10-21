@@ -1,6 +1,7 @@
 package com.r3944realms.leashedplayer.datagen.LanguageAndOtherData;
 
 import com.r3944realms.leashedplayer.content.commands.LeashCommand;
+import com.r3944realms.leashedplayer.content.commands.MotionCommand;
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.gamerules.Server.CreateLeashFenceKnotEntityIfAbsent;
 import com.r3944realms.leashedplayer.content.gamerules.Server.KeepLeashNotDropTime;
@@ -8,6 +9,7 @@ import com.r3944realms.leashedplayer.content.gamerules.Server.TeleportWithLeashe
 import com.r3944realms.leashedplayer.content.items.type.LeashRopeArrowItem;
 import com.r3944realms.leashedplayer.content.items.ModCreativeTab;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
+import com.r3944realms.leashedplayer.datagen.provider.attributes.ModPaintingVariants;
 import com.r3944realms.leashedplayer.utils.Enum.LanguageEnum;
 import com.r3944realms.leashedplayer.utils.Enum.ModPartEnum;
 import net.minecraft.world.item.Item;
@@ -26,6 +28,9 @@ public enum ModLangKeyValue {
     TEST_FABRIC_ITEM(ModItemRegister.FABRIC, ModPartEnum.ITEM, "Fabric", "Fabric", "Fabric", true),
     //ITEM_DESC
     DESC_ITEM_LEASH_ROPE_ARROW(LeashRopeArrowItem.descKey, ModPartEnum.DESCRIPTION, "Arrows with ropes attached?","带有拴绳的箭矢？", "帶有拴繩的箭矢？", false),
+    //PAINTING
+    GROUP_PHOTO_TITLE(ModPaintingVariants.getPaintingVariantTitleKey(ModPaintingVariants.GROUP_PHOTO),ModPartEnum.TITLE, "§dGroup Photo §7[§6memorable§7]§r", "§d集体照  §7[§6纪念§7]§r", "§d集體照 §7[§6紀念§7]§r", false),
+    GROUP_PHOTO_AUTHOR(ModPaintingVariants.getPaintingVariantAuthorKey(ModPaintingVariants.GROUP_PHOTO),ModPartEnum.AUTHOR, "§9Leisure §4Time §eDock§r","§9闲趣§4时§e坞§r","§9閑趣§4時§e塢§r",false),
     //ENTITY
     LEASH_ROPE_ARROW(ModEntityRegister.getEntityNameKey("leash_rope_arrow"), ModPartEnum.ENTITY, "Leash Rope Arrow", "拴绳箭", "拴繩箭", false),
     SPECTRAL_LEASH_ROPE_ARROW(ModEntityRegister.getEntityNameKey("spectral_leash_rope_arrow"), ModPartEnum.ENTITY, "Spectral Leash Rope Arrow", "拴绳光灵箭", "拴繩光靈箭", false),
@@ -44,6 +49,9 @@ public enum ModLangKeyValue {
     MESSAGE_LEASH_CLEAR(LeashCommand.LEASH_DATA_CLEAR, ModPartEnum.COMMAND, "%1$s's LeashData(LeashHolderEntity: %2$s) now is clear", "%1$s的拴绳数据（拴绳持有者实体：%2$s）现在已清除", "%1$s的拴繩數據（拴繩持有者實體：%2$s）現在已清除", false),
     MESSAGE_LEASH_SET_FAILED_FORBID_SAME_ENTITY(LeashCommand.LEASH_DATA_SET_FAILED_FORBID_SAME_ENTITY, ModPartEnum.COMMAND, "Prohibit setting the same entity","禁止设置同一实体", "禁止設置同一實體", false),
     MESSAGE_LEASH_CLEAR_FAILED(LeashCommand.LEASH_DATA_CLEAR_FAILED_NO_DATA, ModPartEnum.COMMAND, "%1$s has no LeashData can be clear", "%1$s沒有拴绳数据可清除", "%1$s沒有拴繩數據實體可被清除", false),
+    MESSAGE_MOTION_ADDER_SUCCESSFUL(MotionCommand.MOTION_ADDER_SUCCESSFUL, ModPartEnum.COMMAND, "§bAdd Successfully.§a%s§7:§f[§eVec§7: §a(§f%f§7,§f%f§7,§f%f§a)§f]§r","§b添加成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r","§b添加成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r", false),
+    MESSAGE_MOTION_SETTER_SUCCESSFUL(MotionCommand.MOTION_SETTER_SUCCESSFUL, ModPartEnum.COMMAND, "§bSet Successfully.§a%s§7:§f[§eVec§7: §a(§f%f§7,§f%f§7,§f%f§a)§f]§r","§b设置成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r","§b設置成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r",false),
+    MESSAGE_MOTION_MULTIPLY_SUCCESSFUL(MotionCommand.MOTION_MULTIPLY_SUCCESSFUL,  ModPartEnum.COMMAND, "§bMultiply Successfully.§a%s§7:§f[§eVec§7: §a(§f%f§7,§f%f§7,§f%f§a)§f]§r","§b倍乘成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r","§b倍乘成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r",false),
     //GAME_RULE_NAME
     TELEPORT_WITH_LEASHED_PLAYERS(TeleportWithLeashedPlayers.NAME_KEY, ModPartEnum.NAME, "Teleport leashed player with player holder", "被拴玩家随玩家持有者传送", "被拴玩家随玩家持有者傳送" ,false),
     CREATE_LEASH_FENCE_KNOT_ENTITY_IF_ABSENT(CreateLeashFenceKnotEntityIfAbsent.NAME_KEY, ModPartEnum.NAME, "Create Leash Fence Knot Entity if absent", "如果缺失则创建拴绳结", "如果缺失則創建拴繩結", false),

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.r3944realms.leashedplayer.content.commands.Command.getLiterArgumentBuilderOfCSS;
+
 public class LeashCommand {
     public static final Integer MIN_VALUE = LeashPlayerCommonConfig.MinimumLeashLengthCanBeSet.get();
     public static final Integer MAX_VALUE = LeashPlayerCommonConfig.MaximumLeashLengthCanBeSet.get();
@@ -50,14 +52,7 @@ public class LeashCommand {
                                 LEASH_DATA_SET_FAILED_FORBID_SAME_ENTITY = LEASH_DATA_SET + ".failed.forbid_same_entity",
                                 LEASH_DATA_CLEAR_FAILED_NO_DATA = LEASH_DATA_CLEAR + ".leash.clear.failed.no_data"
                                 ;
-    private static LiteralArgumentBuilder<CommandSourceStack> getLiterArgumentBuilderOfCSS(String name, boolean shouldAddToList, @Nullable List<LiteralArgumentBuilder<CommandSourceStack>> list) {
-        LiteralArgumentBuilder<CommandSourceStack> literal = Commands.literal(name);
-        if (shouldAddToList) {
-            assert list != null;
-            list.add(literal);
-        }
-        return literal;
-    }
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         boolean shouldUsePrefix = LeashPlayerCommonConfig.EnableLeashPlayerCommandPrefix.get();
         @Nullable List<LiteralArgumentBuilder<CommandSourceStack>> nodeList = shouldUsePrefix ? null : new ArrayList<>();

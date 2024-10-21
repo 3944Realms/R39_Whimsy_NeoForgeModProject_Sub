@@ -37,5 +37,10 @@
   "leashedplayer.command.leash.message.leash.data.show": "%1$s的拴绳数据实体为%2$s",
   "leashedplayer.command.leash.message.leash.length.failed": "失败（内部错误,可能是你输的指令有误）",
   "leashedplayer.command.leash.message.leash.length.set": "%1$s的拴绳长度被设置为%2$s格",
-  "leashedplayer.command.leash.message.leash.length.show": "%1$s的拴绳长度为%2$s格"
+  "leashedplayer.command.leash.message.leash.length.show": "%1$s的拴绳长度为%2$s格",
+  "leashedplayer.command.motion.message.adder.successful": "§b添加成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r",
+  "leashedplayer.command.motion.message.multiply.successful": "§b倍乘成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r",
+  "leashedplayer.command.motion.message.setter.successful": "§b设置成功.§a%s§7:§f[§e加速度§7:§a(§f%f§7,§f%f§7,§f%f§a)§f]§r",
+  "painting.leashedplayer.group_photo.author": "§9闲趣§4时§e坞§r",
+  "painting.leashedplayer.group_photo.title": "§d集体照  §7[§6纪念§7]§r"
 }
