@@ -6,7 +6,6 @@ import com.r3944realms.leashedplayer.content.items.type.SpectralLeashRopeArrowIt
 import com.r3944realms.leashedplayer.content.items.type.TestItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpectralArrowItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

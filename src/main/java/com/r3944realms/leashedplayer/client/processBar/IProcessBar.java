@@ -1,7 +1,5 @@
 package com.r3944realms.leashedplayer.client.processBar;
 
-import java.util.concurrent.CompletableFuture;
-
 /**
  * 进度条
 
