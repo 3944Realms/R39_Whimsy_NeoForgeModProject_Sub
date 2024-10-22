@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -67,5 +68,14 @@ public class SpectralLeashRopeArrow extends LeashRopeArrow {
     @Override
     protected ItemStack getSelfItemStack() {
         return ModItemRegister.SPECTRAL_LEASH_ROPE_ARROW.get().getDefaultInstance();
+    }
+
+    @Override
+    protected void hitOnEntityHandler(Entity pEntity) {
+        if(pEntity instanceof LivingEntity livingEntity) {
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, this.duration, 0));
+        } else {
+            super.hitOnEntityHandler(pEntity);
+        }
     }
 }

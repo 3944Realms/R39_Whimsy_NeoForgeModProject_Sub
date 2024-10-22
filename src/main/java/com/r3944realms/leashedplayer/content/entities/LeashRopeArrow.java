@@ -180,6 +180,7 @@ public class LeashRopeArrow extends AbstractArrow  {
         protected void onHitEntity(@NotNull EntityHitResult pResult) {
             if(!level().isClientSide()){
                 Entity entity = pResult.getEntity();
+                hitOnEntityHandler(entity);
                 if(entity instanceof LivingEntity livingEntity){
                     if(livingEntity.equals(this.getOwner())) return;
                     if(this.getOwner() == null && livingEntity instanceof PlayerLeashable pL) { //发射器发出或命令生成
@@ -193,12 +194,15 @@ public class LeashRopeArrow extends AbstractArrow  {
                     } else if (this.getOwner() instanceof PlayerLeashable pL) {
                         Entity leashDataEntity = PlayerLeashable.getLeashDataEntity((ServerPlayer) getOwner(), (ServerLevel) level());
                         if(leashDataEntity != null) pL.dropLeash(true, !(leashDataEntity instanceof LeashRopeArrow));
-                        ItemEntity arrow = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, getSelfItemStack());
+                        ItemEntity arrow = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, getOrginalItemStack());
                         ILivingEntityExtension pLL = (ILivingEntityExtension) pL;
                         pLL.setKeepLeashTick(GameruleRegistry.getGameruleIntValue(level(), KeepLeashNotDropTime.ID));
                         pL.setLeashedTo(pResult.getEntity(), true);
                         this.level().addFreshEntity(arrow);
                         discard();
+                    } else {
+                        ItemEntity lead = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, Items.LEAD.getDefaultInstance());
+                        this.level().addFreshEntity(lead);
                     }
                 } else if (entity instanceof LeashFenceKnotEntity leashKnotFence) {
                     if (getOwner() instanceof PlayerLeashable pL) {
@@ -212,6 +216,9 @@ public class LeashRopeArrow extends AbstractArrow  {
                         discard();
                         return;
                     }
+                } else {
+                    ItemEntity lead = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, Items.LEAD.getDefaultInstance());
+                    this.level().addFreshEntity(lead);
                 }
             }
             super.onHitEntity(pResult);

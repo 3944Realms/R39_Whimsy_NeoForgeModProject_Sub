@@ -3,6 +3,7 @@ package com.r3944realms.leashedplayer;
 import com.mojang.brigadier.CommandDispatcher;
 import com.r3944realms.leashedplayer.content.commands.LeashCommand;
 import com.r3944realms.leashedplayer.content.commands.MotionCommand;
+import com.r3944realms.leashedplayer.content.commands.TickCommand;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -20,6 +21,7 @@ public class CommonEventHandler {
             CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
             LeashCommand.register(dispatcher);
             MotionCommand.register(dispatcher);
+            TickCommand.register(dispatcher);
         }
 
     }
