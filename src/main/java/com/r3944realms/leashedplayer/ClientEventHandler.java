@@ -2,7 +2,6 @@ package com.r3944realms.leashedplayer;
 
 import com.r3944realms.leashedplayer.client.renders.entities.LeashRopeArrowRenderer;
 import com.r3944realms.leashedplayer.client.renders.entities.SpectralLeashRopeArrowRenderer;
-import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
 import com.r3944realms.leashedplayer.content.items.type.ILeashRopeArrow;

@@ -9,6 +9,7 @@
     "server.MixinServerGamePacketListenerImpl"
   ],
   "client": [
+    "MixinMinecraft",
     "client.MixinEntityRenderer",
     "client.MixinLevelRenderer",
     "client.MixinPlayerRenderer"
