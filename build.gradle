@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.165'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -74,7 +74,7 @@ runs {
         // workingDirectory project.file('run-data')
         systemProperty('gradle.task', 'runData')
         // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-        getArguments().addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
