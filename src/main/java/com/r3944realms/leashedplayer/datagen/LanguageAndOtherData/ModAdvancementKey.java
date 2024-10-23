@@ -14,6 +14,7 @@ public enum ModAdvancementKey {
     ADVANCEMENT_LEASH_ARROW("advancement_leash_arrow", LEASH_ARROW),
     FOLLOW_LEASH_ARROW("follow_arrow", LEASH_ARROW),
     DOG_RUNNING_PLAYER("dog_running_player", LEASH_ARROW),
+    NO_LEASH("no_leash", LEASH_START),
     ;
     private final String Name;
     @Nullable

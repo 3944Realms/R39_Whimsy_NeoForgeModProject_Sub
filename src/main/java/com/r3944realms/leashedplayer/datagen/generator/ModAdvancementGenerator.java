@@ -2,15 +2,14 @@ package com.r3944realms.leashedplayer.datagen.generator;
 
 import com.r3944realms.leashedplayer.LeashedPlayer;
 import com.r3944realms.leashedplayer.content.criteriaTriggers.LeashPlayerTrigger;
+import com.r3944realms.leashedplayer.content.effects.ModEffectRegister;
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
 import com.r3944realms.leashedplayer.datagen.LanguageAndOtherData.ModAdvancementKey;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.EntityTypePredicate;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -121,5 +120,21 @@ public class ModAdvancementGenerator implements AdvancementProvider.AdvancementG
                         )
                 )
                 .parent(hasLeashRopeItem).save(saver, ModAdvancementKey.LEASHED_FRIEND.getNameWithNameSpace());
+        AdvancementHolder no_leash = Advancement.Builder.advancement().display(
+                Items.BARRIER,
+                Component.translatable(ModAdvancementKey.NO_LEASH.getNameKey()),
+                Component.translatable(ModAdvancementKey.NO_LEASH.getDescKey()),
+                null,
+                AdvancementType.GOAL,
+                true,
+                true,
+                true
+        ).addCriterion("no_leash",
+                EffectsChangedTrigger.TriggerInstance.hasEffects(
+                        MobEffectsPredicate.Builder.effects()
+                                .and(ModEffectRegister.NO_LEASH_EFFECT)
+                )
+        ).parent(hasLeashRopeItem).save(saver, ModAdvancementKey.NO_LEASH.getNameWithNameSpace());
     }
+
 }
