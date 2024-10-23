@@ -1,0 +1,33 @@
+{
+  "parent": "leashedplayer:leash_start",
+  "criteria": {
+    "no_leash": {
+      "conditions": {
+        "effects": {
+          "leashedplayer:no_leash": {}
+        }
+      },
+      "trigger": "minecraft:effects_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.leashedplayer.no_leash.desc"
+    },
+    "frame": "goal",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:barrier"
+    },
+    "title": {
+      "translate": "advancement.leashedplayer.no_leash"
+    }
+  },
+  "requirements": [
+    [
+      "no_leash"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

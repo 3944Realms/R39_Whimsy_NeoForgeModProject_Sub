@@ -2,6 +2,8 @@ package com.r3944realms.leashedplayer.datagen.LanguageAndOtherData;
 
 import com.r3944realms.leashedplayer.content.commands.LeashCommand;
 import com.r3944realms.leashedplayer.content.commands.MotionCommand;
+import com.r3944realms.leashedplayer.content.effects.ModEffectRegister;
+import com.r3944realms.leashedplayer.content.effects.ModPotionRegister;
 import com.r3944realms.leashedplayer.content.entities.ModEntityRegister;
 import com.r3944realms.leashedplayer.content.gamerules.Server.CreateLeashFenceKnotEntityIfAbsent;
 import com.r3944realms.leashedplayer.content.gamerules.Server.DisablePlayerMoveCheck;
@@ -71,6 +73,7 @@ public enum ModLangKeyValue {
     LEASH_PLAYER(ModAdvancementKey.LEASHED_FRIEND.getNameKey(),ModPartEnum.NAME, "Be bound by Rope", "拴绳链接", "拴繩鏈接" , false),
     FOLLOW_ARROW(ModAdvancementKey.FOLLOW_LEASH_ARROW.getNameKey(), ModPartEnum.NAME, "Launch!!!", "启航！！！" , "啓航！！！",false),
     FOLLOW_WOLF(ModAdvancementKey.DOG_RUNNING_PLAYER.getNameKey(), ModPartEnum.NAME, "It's Walking human time.", "遛“人”时间", "遛“人”時間",false),
+    NO_LEASH(ModAdvancementKey.NO_LEASH.getNameKey(), ModPartEnum.NAME, "Don't tie me up", "勿拴我", "請恁勿拴唔", false),
     //ADV_DESC
     LEASH_START_DESC(ModAdvancementKey.LEASH_START.getDescKey(), ModPartEnum.DESCRIPTION, "Journey to becoming a Leash Expert", "拴绳大师之路", "拴繩大師之路", false),
     LEASH_LR_ARROW_DESC(ModAdvancementKey.LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Maybe you can using it to shoot some mob?", "也许可以用它来发射生物？", "也許可以用它發射生物?", false),
@@ -79,6 +82,15 @@ public enum ModLangKeyValue {
     LEASH_PLAYER_DESC(ModAdvancementKey.LEASHED_FRIEND.getDescKey(),ModPartEnum.DESCRIPTION, "Be Bond by player with lead", "被玩家用拴绳链接", "被玩家用拴繩鏈接", false),
     FOLLOW_ARROW_DESC(ModAdvancementKey.FOLLOW_LEASH_ARROW.getDescKey(), ModPartEnum.DESCRIPTION, "Mc, what are you talking about in physics?", "抱歉，我的世界不存在物理学" , "抱歉，麦块不講物理學",false),
     FOLLOW_WOLF_DESC(ModAdvancementKey.DOG_RUNNING_PLAYER.getDescKey(), ModPartEnum.DESCRIPTION, "In the park where dogs are not allowed to be walked, the dog decided to walk the human instead", "公园不能遛狗，于是狗站起来遛人", "公園裏不許遛狗，於是狗站起來遛人",false),
+    NO_LEASH_DESC(ModAdvancementKey.NO_LEASH.getDescKey(), ModPartEnum.NAME, "You cannot be leashed by ANY", "你不会被任何东西拴住", "恁不會被任何拴住", false),
+    //MOB_EFFECT
+    NO_LEASH_EFFECT(ModEffectRegister.getEffectKey(ModEffectRegister.NO_LEASH_EFFECT.get()), ModPartEnum.NAME, "No Leash", "禁拴", "禁拴", false),
+    //POTION
+    NO_LEASH_POTION(ModPotionRegister.getPotionNameKey("no_leash", (char) 0), ModPartEnum.NAME, "No Leash Potion", "禁拴药水", "禁拴藥水", false),
+    NO_LEASH_POTION_SPLASH(ModPotionRegister.getPotionNameKey("no_leash", (char) 2), ModPartEnum.NAME, "Splash No Leash Potion", "喷溅型禁拴药水", "噴濺型禁拴藥水", false),
+    NO_LEASH_POTION_LINGERING(ModPotionRegister.getPotionNameKey("no_leash", (char) 1), ModPartEnum.NAME, "Splash No Leash Potion", "滞留型禁拴药水", "滯留型禁拴藥水", false),
+    //ARROW
+    NO_LEASH_ARROW(ModPotionRegister.getTippedArrowNameKey("no_leash"), ModPartEnum.ITEM, "Arrow of No Leash", "禁拴之箭", "禁拴之箭", false),
     ;
     private final Supplier<?> supplier;
     private String key;

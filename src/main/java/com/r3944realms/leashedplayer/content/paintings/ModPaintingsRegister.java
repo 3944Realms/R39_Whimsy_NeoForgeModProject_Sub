@@ -1,4 +1,4 @@
-package com.r3944realms.leashedplayer.content.paintings.paintings;
+package com.r3944realms.leashedplayer.content.paintings;
 
 import com.r3944realms.leashedplayer.LeashedPlayer;
 import net.minecraft.core.registries.Registries;
