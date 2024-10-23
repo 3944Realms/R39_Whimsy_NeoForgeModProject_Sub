@@ -3,6 +3,7 @@ package com.r3944realms.leashedplayer.mixin.server;
 import com.r3944realms.leashedplayer.content.gamerules.GameruleRegistry;
 import com.r3944realms.leashedplayer.content.gamerules.Server.TeleportWithLeashedPlayers;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
@@ -52,5 +53,11 @@ public class MixinServerGamePacketListenerImpl {
                 }
             }
         }
+    }
+    @SuppressWarnings("DiscouragedShift")
+    @Inject(method = {"handleMovePlayer"}, at = @At(value = "INVOKE",target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;[Ljava/lang/Object;)V", ordinal = 0, shift = At.Shift.BEFORE), cancellable = true)
+    private void handleMovePlayer(ServerboundMovePlayerPacket pPacket, CallbackInfo ci) {
+        if(GameruleRegistry.getGameruleBoolValue(this.player.serverLevel(), TeleportWithLeashedPlayers.ID))
+            ci.cancel();
     }
 }
