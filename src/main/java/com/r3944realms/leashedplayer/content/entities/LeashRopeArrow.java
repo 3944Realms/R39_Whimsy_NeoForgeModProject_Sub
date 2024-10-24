@@ -1,6 +1,7 @@
 package com.r3944realms.leashedplayer.content.entities;
 
 import com.r3944realms.leashedplayer.config.LeashPlayerCommonConfig;
+import com.r3944realms.leashedplayer.content.effects.ModEffectRegister;
 import com.r3944realms.leashedplayer.content.gamerules.GameruleRegistry;
 import com.r3944realms.leashedplayer.content.gamerules.Server.KeepLeashNotDropTime;
 import com.r3944realms.leashedplayer.content.items.ModItemRegister;
@@ -9,8 +10,10 @@ import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -59,8 +62,10 @@ public class LeashRopeArrow extends AbstractArrow  {
 
         @Override
         public void setOwner(@Nullable Entity pEntity) {
-            super.setOwner(pEntity);
-
+//            super.setOwner(pEntity);
+            boolean isNull = pEntity == null;
+            this.ownerUUID = isNull ? null : pEntity.getUUID();
+            this.cachedOwner = isNull ? null : pEntity;
             this.pickup = this.pickup == Pickup.CREATIVE_ONLY ? this.pickup : Pickup.DISALLOWED;
         }
 
@@ -92,7 +97,7 @@ public class LeashRopeArrow extends AbstractArrow  {
                 }
                 if(life <= 240) {
                     if(pPlayer.isShiftKeyDown()) {
-                        Entity leashDataEntity = PlayerLeashable.getLeashDataEntity((ServerPlayer) this.getOwner(), (ServerLevel) level());
+                        Entity leashDataEntity =  this.getOwner() instanceof PlayerLeashable ? PlayerLeashable.getLeashDataEntity((ServerPlayer) this.getOwner(), (ServerLevel) level()) : this.getOwner();
                         if(this.ownedBy(pPlayer)) {
                             this.pickup = Pickup.ALLOWED;
                             if(this.equals(leashDataEntity)) playerLeashable.dropLeash(true, false);
@@ -100,12 +105,16 @@ public class LeashRopeArrow extends AbstractArrow  {
                             if(life >= 120) {
                                 Entity owner = getOwner();
                                 if( owner != null ) {
-                                    if(this.equals(leashDataEntity)) {
-                                        ((PlayerLeashable) owner).setLeashedTo(pPlayer, true);
-                                        ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getOrginalItemStack());
-                                        level().addFreshEntity(itemEntity);
-                                        discard();
+//                                    if(this.equals(leashDataEntity)) {
+                                    if(owner instanceof PlayerLeashable player) {
+                                        player.setLeashedTo(pPlayer, true);
+                                    } else if(owner instanceof Leashable leashable) {
+                                        leashable.setLeashedTo(pPlayer, true);
                                     }
+                                    ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getOrginalItemStack());
+                                    level().addFreshEntity(itemEntity);
+                                    discard();
+//                                    }
                                 } else return true;
                             } else return false;
                         }
@@ -113,18 +122,20 @@ public class LeashRopeArrow extends AbstractArrow  {
 
                 }
                 else {
-                    Entity leashDataEntity = PlayerLeashable.getLeashDataEntity((ServerPlayer) this.getOwner(), (ServerLevel) level());
+                    Entity leashDataEntity =  this.getOwner() instanceof PlayerLeashable ? PlayerLeashable.getLeashDataEntity((ServerPlayer) this.getOwner(), (ServerLevel) level()) : this.getOwner();
                     if(this.ownedBy(pPlayer)) {
                         this.pickup = Pickup.ALLOWED;
                         if(this.equals(leashDataEntity)) playerLeashable.dropLeash(true, false);
                     } else {
-                        if(this.equals(leashDataEntity)) {
-                            Entity owner = getOwner();
-                            ((PlayerLeashable)owner).setLeashedTo(pPlayer, true);
-                            ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getOrginalItemStack());
-                            level().addFreshEntity(itemEntity);
-                            discard();
+                        Entity owner = getOwner();
+                        if(owner instanceof PlayerLeashable player) {
+                            player.setLeashedTo(pPlayer, true);
+                        } else if(owner instanceof Leashable leashable) {
+                            leashable.setLeashedTo(pPlayer, true);
                         }
+                        ItemEntity itemEntity = new ItemEntity(level(), getX(), getY(), getZ(), getOrginalItemStack());
+                        level().addFreshEntity(itemEntity);
+                        discard();
 
                     }
                 }
@@ -170,6 +181,18 @@ public class LeashRopeArrow extends AbstractArrow  {
                         this.level().addFreshEntity(arrow);
                         discard();
                     }
+                } else if(getOwner() instanceof Leashable L) {
+                    if (this.level().getBlockState(pResult.getBlockPos()).is(BlockTags.FENCES)) {
+                        Entity leashDataEntity = this.getOwner();
+                        if(leashDataEntity != null) {
+                            L.dropLeash(true, false);
+                        }
+                        Entity leashKnotFence = LeashFenceKnotEntity.getOrCreateKnot(this.level(), pResult.getBlockPos());
+                        L.setLeashedTo(leashKnotFence, true);
+                        ItemEntity arrow = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, getOrginalItemStack());
+                        this.level().addFreshEntity(arrow);
+                        discard();
+                    }
                 }
             }
             super.onHitBlock(pResult);
@@ -181,7 +204,13 @@ public class LeashRopeArrow extends AbstractArrow  {
             if(!level().isClientSide()){
                 Entity entity = pResult.getEntity();
                 hitOnEntityHandler(entity);
-                if(entity instanceof LivingEntity livingEntity){
+                if(this.getOwner() instanceof LivingEntity livingEntity ) {
+                    MobEffectInstance effect = livingEntity.getEffect(ModEffectRegister.NO_LEASH_EFFECT);
+                    if(effect != null && effect.getDuration() > 0) {
+                        this.setOwner(null);
+                    }
+                }
+                if(entity instanceof LivingEntity livingEntity) {
                     if(livingEntity.equals(this.getOwner())) return;
                     if(this.getOwner() == null && livingEntity instanceof PlayerLeashable pL) { //发射器发出或命令生成
                         setOwner(livingEntity);
@@ -201,10 +230,30 @@ public class LeashRopeArrow extends AbstractArrow  {
                         this.level().addFreshEntity(arrow);
                         discard();
                     } else {
+                        if(entity instanceof Leashable leashable) {
+                            if (getOwner() == null) {
+                                Entity leashDataEntity = leashable.getLeashHolder();
+                                if (leashDataEntity != null)
+                                    leashable.dropLeash(true, !(leashDataEntity instanceof LeashRopeArrow));
+                                leashable.setLeashedTo(this, true);
+                                this.setOwner(entity);
+                                return;
+                            }
+                        }
+                        if(entity instanceof LivingEntity living) {
+                            if(this.getOwner() != null && this.getOwner()instanceof Leashable leashable) {
+                                leashable.setLeashedTo(living, true);
+                                ItemEntity arrow = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, getOrginalItemStack());
+                                this.level().addFreshEntity(arrow);
+                                discard();
+                                return;
+                            }
+                        }
                         ItemEntity lead = new ItemEntity(this.level(), this.position().x, this.position().y, this.position().z, Items.LEAD.getDefaultInstance());
                         this.level().addFreshEntity(lead);
                     }
-                } else if (entity instanceof LeashFenceKnotEntity leashKnotFence) {
+                }
+                else if (entity instanceof LeashFenceKnotEntity leashKnotFence) {
                     if (getOwner() instanceof PlayerLeashable pL) {
                         Entity leashDataEntity = PlayerLeashable.getLeashDataEntity((ServerPlayer) getOwner(), (ServerLevel) level());
                         if(leashDataEntity != null) pL.dropLeash(true, true);
@@ -223,4 +272,5 @@ public class LeashRopeArrow extends AbstractArrow  {
             }
             super.onHitEntity(pResult);
         }
+
 }

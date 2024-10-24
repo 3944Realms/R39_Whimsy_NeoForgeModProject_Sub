@@ -2,6 +2,7 @@ package com.r3944realms.leashedplayer.mixin.both;
 
 import com.r3944realms.leashedplayer.LeashedPlayer;
 import com.r3944realms.leashedplayer.content.commands.LeashCommand;
+import com.r3944realms.leashedplayer.content.effects.ModEffectRegister;
 import com.r3944realms.leashedplayer.content.entities.LeashRopeArrow;
 import com.r3944realms.leashedplayer.modInterface.ILivingEntityExtension;
 import com.r3944realms.leashedplayer.modInterface.PlayerLeashable;
@@ -11,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Leashable;
@@ -188,7 +190,7 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
     @Unique
     protected void Pl$tickLeash() {
         if(this.Pl$LeashData == null) return;//没有Data直接退出
-        ILivingEntityExtension self = (ILivingEntityExtension) this;
+        ILivingEntityExtension self = this;
         int keepLeashTick = self.getKeepLeashTick();
 
         //info -> Holder整理
@@ -198,9 +200,15 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerLeashabl
         Entity entity = this.Pl$LeashData.leashHolder;
         //保存数据
         saveLeashData(Pl$LeashData);
-        ILivingEntityExtension iEntityExtension = (ILivingEntityExtension) this;//获取设定值
+        ILivingEntityExtension iEntityExtension = this;//获取设定值
         float leashLengthSelf = iEntityExtension.getLeashLength();
         leashLength = leashLengthSelf > LeashCommand.MIN_VALUE ? leashLengthSelf : LeashCommand.MIN_VALUE;
+        MobEffectInstance effect = this.getEffect(ModEffectRegister.NO_LEASH_EFFECT);
+        if(effect != null && effect.getDuration() > 0) {
+            if (entity instanceof LeashRopeArrow arrow)
+                arrow.setOwner(null);
+            this.dropLeash(true, !(entity instanceof LeashRopeArrow));
+        }
         if (entity != null) {
             double breakDistanceTime = (entity instanceof LeashRopeArrow) ? LeashedPlayer.M1() * LeashedPlayer.M2() : LeashedPlayer.M1();
             if(!isAlive() || !entity.isAlive() ||( distanceTo(entity) > Math.max(leashLength * breakDistanceTime, LeashCommand.MIN_VALUE * breakDistanceTime) && keepLeashTick == 0)){
